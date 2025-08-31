@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: JuryScan-API-dev
+  datasource:
+    url: jdbc:h2:mem:h2db # or jdbc:h2:file:/~h2db to persist data
+    username: ${H2_USER:root}
+    password: ${H2_PASSWORD:root}
+    driverClassName: org.h2.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: false
+
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    whitelabel:
+      enabled: false
+
+logging:
+  level:
+    org.hibernate: DEBUG
+    org.springframework.security: DEBUG
