@@ -65,6 +65,28 @@ O Projeto segue uma estrutura e padronização como forma de manter o uso de boa
 # 📄 Documentação
 A documentação da API do JuryScan pode ser acessada no endpoint `/swagger-ui/index.html`
 
+# 🤝 Contribuição
+As contribuições do projeto seguem um padrão de nomeclatura de branch e também faz uso de commit semântico para organização e padronização, descritas [aqui](https://github.com/iuricode/padroes-de-commits)
+
+Após clonar o projeto, siga os seguintes passos para realizar uma contribuição:
+1. Crie uma branch da alteração
+```shell
+git switch -c feature/new-feature
+```
+2. Faça o commit das alterações
+```shell
+git commit -m "feat: add new class"
+```
+3. Faça o push para a nova branch
+```shell
+git push origin feature/new-feature
+```
+4. Faça o Pull Request
+5. Quando o pull request for aprovado, volte para a branch principal (main ou develop) e faça outra contribuição :)
+```shell
+git switch develop
+```
+
 # ❗ Observações
 Algumas observações consideráveis para essa aplicação
 - O H2 Database pode ser apenas utilizado em ambiente de desenvolvimento. A visualização do esquema pode ser visualizado no endpoint `/h2-console`
