@@ -1,4 +1,4 @@
-package unicap.juryscan.security;
+package unicap.juryscan.infra.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

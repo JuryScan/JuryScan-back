@@ -11,6 +11,9 @@ spring:
       ddl-auto: validate # Only validate the db schema
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+  flyway:
+    enabled: false
+
 server:
   port: ${SERVER_PORT:8080}
   error:
