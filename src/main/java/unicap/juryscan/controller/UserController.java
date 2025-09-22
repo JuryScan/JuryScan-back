@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
-public class HomeController {
+@RequestMapping("${api.uri}/users")
+public class UserController {
 
     @GetMapping
-    public String helloJuryScan(){
-        return "Bem-vindo a API do JuryScan!";
+    public String users(){
+        return "users";
     }
 }

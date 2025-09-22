@@ -19,3 +19,6 @@ server:
   error:
     whitelabel:
       enabled: false
+
+api:
+  uri: /api/v1
