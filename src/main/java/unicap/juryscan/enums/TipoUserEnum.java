@@ -1,5 +1,5 @@
 package unicap.juryscan.enums;
 
-public enum TipoUsuarioEnum {
+public enum TipoUserEnum {
     COMUM, ADMIN, ADVOGADO
 }

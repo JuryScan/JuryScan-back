@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import unicap.juryscan.enums.AtivoEnum;
-import unicap.juryscan.enums.TipoUsuarioEnum;
+import unicap.juryscan.enums.UserAtivoEnum;
+import unicap.juryscan.enums.TipoUserEnum;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -27,7 +28,7 @@ public class User {
 
     @Column(name = "tipo_usuario")
     @Enumerated(EnumType.STRING)
-    private TipoUsuarioEnum tipoUsuario;
+    private TipoUserEnum tipoUsuario;
 
     @Column(name = "nome_completo")
     private String nomeCompleto;
@@ -45,7 +46,7 @@ public class User {
     private String cpf;
 
     @Enumerated(EnumType.STRING)
-    private AtivoEnum ativo;
+    private UserAtivoEnum ativo;
 
     private Boolean emailVerificado;
 
@@ -61,7 +62,6 @@ public class User {
     private String numero_oab;
     private String experiencia;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_endereco")
-    private Address address;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Address> enderecos;
 }

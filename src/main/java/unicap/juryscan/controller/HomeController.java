@@ -10,6 +10,6 @@ public class HomeController {
 
     @GetMapping
     public String helloJuryScan(){
-        return "Bem-vindo a API do JuryScan!";
+        return "Bem-vindo a API do JuryScan! rotas acessadas em /api/v1 e documentação /swagger-ui/index.html";
     }
 }

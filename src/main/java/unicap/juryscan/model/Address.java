@@ -30,6 +30,7 @@ public class Address {
     private String estado;
     private String cep;
 
-    @OneToMany(mappedBy = "address")
-    private List<User> usuarios;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_usuario")
+    private User usuario;
 }
