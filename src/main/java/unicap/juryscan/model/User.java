@@ -2,18 +2,14 @@ package unicap.juryscan.model;
 
 import jakarta.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import unicap.juryscan.enums.UserAtivoEnum;
+import unicap.juryscan.enums.UserStatusEnum;
 import unicap.juryscan.enums.TipoUserEnum;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -46,7 +42,8 @@ public class User {
     private String cpf;
 
     @Enumerated(EnumType.STRING)
-    private UserAtivoEnum ativo;
+    @Column(name = "status")
+    private UserStatusEnum status;
 
     private Boolean emailVerificado;
 
@@ -62,6 +59,7 @@ public class User {
     private String numero_oab;
     private String experiencia;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Address> enderecos;
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_endereco")
+    private Address endereco;
 }

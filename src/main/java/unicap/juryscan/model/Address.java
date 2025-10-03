@@ -24,13 +24,12 @@ public class Address {
     @Enumerated(EnumType.STRING)
     private TipoEnderecoEnum tipoEndereco;
 
-    private String rua;
+    private String logradouro;
     private String cidade;
     private String bairro;
     private String estado;
     private String cep;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id_usuario")
-    private User usuario;
+    @OneToMany(mappedBy = "endereco", cascade = CascadeType.ALL)
+    private List<User> usuarios;
 }

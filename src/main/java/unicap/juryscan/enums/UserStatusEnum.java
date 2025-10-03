@@ -1,5 +1,5 @@
 package unicap.juryscan.enums;
 
-public enum UserAtivoEnum {
+public enum UserStatusEnum {
     ATIVO, INATIVO
 }

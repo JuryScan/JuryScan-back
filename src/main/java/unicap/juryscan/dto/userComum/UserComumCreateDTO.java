@@ -5,10 +5,11 @@ import lombok.*;
 import java.sql.Date;
 
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
 public class UserComumCreateDTO {
     private String nomeCompleto;
     private String email;
