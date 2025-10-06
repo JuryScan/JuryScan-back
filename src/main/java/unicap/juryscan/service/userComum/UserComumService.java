@@ -52,4 +52,20 @@ public class UserComumService implements IUserComumService {
                 .map(userComumMapper::toResponseDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
     }
+
+    @Override
+    public void hardDeleteUserComum(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        userRepository.delete(user);
+    }
+
+    @Override
+    public void softDeleteUserComum(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        if (user.getStatus() == UserStatusEnum.INATIVO) throw new IllegalStateException("Usuário já está inativo");
+        user.setStatus(UserStatusEnum.INATIVO);
+        userRepository.save(user);
+    }
 }

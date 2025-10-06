@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
 
-import unicap.juryscan.model.User;
 import unicap.juryscan.service.userComum.UserComumService;
 import unicap.juryscan.utils.ApiResponse;
 
@@ -48,7 +47,16 @@ public class UserComumController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable UUID userId){
-        return null;
+    public ResponseEntity<ApiResponse> hardDeleteUser(@PathVariable UUID userId){
+        userComumService.hardDeleteUserComum(userId);
+        ApiResponse response = new ApiResponse(true, "Usuário deletado com sucesso", 200);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @PostMapping("/{userId}/soft-delete")
+    public ResponseEntity<ApiResponse> softDeleteUser(@PathVariable UUID userId){
+        userComumService.softDeleteUserComum(userId);
+        ApiResponse response = new ApiResponse(true, "Usuário desativado com sucesso", 200);
+        return ResponseEntity.status(200).body(response);
     }
 }

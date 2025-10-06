@@ -22,3 +22,5 @@ server:
 
 api:
   uri: /api/v1
+  data-load:
+    create-default-users: true
