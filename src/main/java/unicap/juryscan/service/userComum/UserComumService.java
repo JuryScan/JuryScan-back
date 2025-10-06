@@ -1,6 +1,9 @@
 package unicap.juryscan.service.userComum;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
 import unicap.juryscan.enums.TipoUserEnum;
@@ -10,7 +13,6 @@ import unicap.juryscan.mapper.UserComumMapper;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.UserRepository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,12 +27,20 @@ public class UserComumService implements IUserComumService {
     }
 
     @Override
-    public List<UserComumResponseDTO> getAllUserComums(){
-        return userRepository
-                .findAllByTipoUsuario(TipoUserEnum.COMUM)
-                .stream()
-                .map(userComumMapper::toResponseDTO)
-                .toList();
+    public PageResponse<UserComumResponseDTO> getAllUserComums(Pageable pageable) {
+        Page<UserComumResponseDTO> page = userRepository
+                .findAllByTipoUsuario(TipoUserEnum.COMUM, pageable)
+                .map(userComumMapper::toResponseDTO);
+
+        //TODO Implementação de mapper de Page para PageResponse
+        PageResponse<UserComumResponseDTO> pageResponse = new PageResponse<>();
+        pageResponse.setTotalElements(page.getTotalElements());
+        pageResponse.setTotalPages(page.getTotalPages());
+        pageResponse.setPage(page.getNumber());
+        pageResponse.setItems(page.getContent());
+        pageResponse.setPageSize(page.getSize());
+
+        return pageResponse;
     }
 
     @Override
@@ -47,22 +57,22 @@ public class UserComumService implements IUserComumService {
 
     @Override
     public UserComumResponseDTO getUserComumById(UUID id){
-        return userRepository
-                .findById(id)
-                .map(userComumMapper::toResponseDTO)
+        User user = userRepository
+                .findByTipoUsuarioAndId(TipoUserEnum.COMUM, id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        return userComumMapper.toResponseDTO(user);
     }
 
     @Override
     public void hardDeleteUserComum(UUID id) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByTipoUsuarioAndId(TipoUserEnum.COMUM, id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
         userRepository.delete(user);
     }
 
     @Override
     public void softDeleteUserComum(UUID id) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByTipoUsuarioAndId(TipoUserEnum.COMUM, id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
         if (user.getStatus() == UserStatusEnum.INATIVO) throw new IllegalStateException("Usuário já está inativo");
         user.setStatus(UserStatusEnum.INATIVO);

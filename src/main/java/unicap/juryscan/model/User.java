@@ -56,7 +56,8 @@ public class User {
 
     // dados do advogado
     private String descricao;
-    private String numero_oab;
+    @Column(name = "numero_oab")
+    private String numeroOab;
     private String experiencia;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
