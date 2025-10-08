@@ -31,3 +31,9 @@ logging:
   level:
     org.hibernate: DEBUG
     org.springframework.security: DEBUG
+
+api:
+  uri: /api/v1
+  data-load:
+    create-default-users: ${CREATE_DEFAULT_USERS:false}
+    create-dump-data: ${CREATE_DUMP_DATA:false}
