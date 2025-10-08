@@ -23,5 +23,5 @@ server:
 api:
   uri: /api/v1
   data-load:
-    create-default-users: false
-    create-dump-data: false
+    create-default-users: ${CREATE_DEFAULT_USERS:false}
+    create-dump-data: ${CREATE_DUMP_DATA:false}
