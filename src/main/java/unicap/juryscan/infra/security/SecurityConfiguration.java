@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 import unicap.juryscan.config.CorsConfig;
 
@@ -21,9 +22,13 @@ import unicap.juryscan.config.CorsConfig;
 public class SecurityConfiguration {
 
     private final CorsConfigurationSource corsConfigurationSource;
+    private final SecurityFilter securityFilter;
 
-    public SecurityConfiguration(CorsConfig corsConfig) {
+    private final String BASEURI = "/api/v1";
+
+    public SecurityConfiguration(CorsConfig corsConfig, SecurityFilter securityFilter) {
         this.corsConfigurationSource = corsConfig.corsConfigurationSource();
+        this.securityFilter = securityFilter;
     }
 
     @Bean
@@ -33,10 +38,15 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/swagger-ui/index.html/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/comum/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/advogado/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/comum/**").hasAnyRole("COMUM")
-                        .anyRequest()
-                        .authenticated())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/comum/**").hasRole("COMUM")
+                        .anyRequest().authenticated())
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

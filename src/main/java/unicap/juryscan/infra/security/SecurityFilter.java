@@ -5,16 +5,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import unicap.juryscan.exception.custom.ResourceNotFoundException;
-import unicap.juryscan.model.User;
 import unicap.juryscan.repository.UserRepository;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -36,16 +33,12 @@ public class SecurityFilter extends OncePerRequestFilter {
         var login = tokenService.validateToken(token);
 
         if (login != null){
-            User user = userRepository.findByEmailIgnoreCase(login).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
-            String role = switch (user.getTipoUsuario()){
-                case COMUM -> "ROLE_COMUM";
-                case ADVOGADO -> "ROLE_ADVOGADO";
-                case ADMIN -> "ROLE_ADMIN";
-            };
-            var authorities = Collections.singleton(new SimpleGrantedAuthority(role));
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+            UserDetails user = userRepository.findByEmailIgnoreCase(login);
+
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+        // Passa para o próximo filter
         filterChain.doFilter(request, response);
     }
 

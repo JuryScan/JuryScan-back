@@ -2,6 +2,7 @@ package unicap.juryscan.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
@@ -33,6 +34,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         if (createDefaultUsers){
             createDefaultUsers();
             System.out.println("🔧 COMMAND LINE RUNNER : Default users created.");
@@ -45,17 +47,20 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createDefaultUsers(){
+        // User comum
         UserComumCreateDTO userComumCreateDTO = new UserComumCreateDTO();
         userComumCreateDTO.setNomeCompleto("user1");
-        userComumCreateDTO.setSenha("123456");
+
+        userComumCreateDTO.setSenha("123");
         userComumCreateDTO.setCpf("123456789");
         userComumCreateDTO.setEmail("user1@email.com");
         userComumCreateDTO.setTelefone("81999999999");
         userComumCreateDTO.setDataNascimento(Date.valueOf(LocalDate.of(2000,1,1)));
 
+        // User advogado
         UserAdvogadoCreateDTO userAdvogadoCreateDTO = new UserAdvogadoCreateDTO();
         userAdvogadoCreateDTO.setNomeCompleto("advogado1");
-        userAdvogadoCreateDTO.setSenha("123456");
+        userAdvogadoCreateDTO.setSenha("123");
         userAdvogadoCreateDTO.setCpf("987654321");
         userAdvogadoCreateDTO.setEmail("advogado1@email.com");
         userAdvogadoCreateDTO.setTelefone("81988888888");
@@ -69,10 +74,11 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createDumpData(){
+
         for (int i=0; i<100; i++){
             UserComumCreateDTO userComumCreateDTO = new UserComumCreateDTO();
             userComumCreateDTO.setNomeCompleto("user"+i);
-            userComumCreateDTO.setSenha("123456");
+            userComumCreateDTO.setSenha("123");
             userComumCreateDTO.setCpf("123456789"+i);
             userComumCreateDTO.setEmail("user"+i+"@email.com");
             userComumCreateDTO.setTelefone("8199999999");
