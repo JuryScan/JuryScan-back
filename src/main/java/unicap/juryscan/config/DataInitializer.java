@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 //TODO Fazer initializer para criar tres tipos de usuario em ambiente de desenvolvimento, comum, advogado e admin
+//TODO adicionar password encoder
 @Component
 public class DataInitializer implements CommandLineRunner {
 

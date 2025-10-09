@@ -2,6 +2,7 @@ package unicap.juryscan.service.userAdvogado;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
@@ -9,6 +10,7 @@ import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
 import unicap.juryscan.enums.TipoUserEnum;
 import unicap.juryscan.enums.UserStatusEnum;
 import unicap.juryscan.exception.custom.ResourceNotFoundException;
+import unicap.juryscan.exception.custom.UserAlreadyExistsException;
 import unicap.juryscan.mapper.UserAdvogadoMapper;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.UserRepository;
@@ -21,16 +23,24 @@ public class UserAdvogadoService implements IUserAdvogadoService {
 
     private final UserRepository userRepository;
     private final UserAdvogadoMapper userAdvogadoMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserAdvogadoService(UserRepository userRepository, UserAdvogadoMapper userAdvogadoMapper) {
+    public UserAdvogadoService(UserRepository userRepository, UserAdvogadoMapper userAdvogadoMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userAdvogadoMapper = userAdvogadoMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserAdvogadoResponseDTO createUserAdvogado(UserAdvogadoCreateDTO userCreateDTO) {
+        if (userRepository.findByEmailIgnoreCase(userCreateDTO.getEmail()) != null) {
+            throw new UserAlreadyExistsException("Usuário com esse email já existe");
+        }
+
         User userMapped = userAdvogadoMapper.toEntity(userCreateDTO);
-        userMapped.setSenha(userCreateDTO.getSenha());
+        String encryptedPassword = passwordEncoder.encode(userCreateDTO.getSenha());
+
+        userMapped.setSenha(encryptedPassword);
         userMapped.setTipoUsuario(TipoUserEnum.ADVOGADO);
         userMapped.setStatus(UserStatusEnum.ATIVO);
         userMapped.setEmailVerificado(false);

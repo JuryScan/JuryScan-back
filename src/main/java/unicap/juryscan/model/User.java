@@ -5,11 +5,16 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import unicap.juryscan.enums.UserStatusEnum;
 import unicap.juryscan.enums.TipoUserEnum;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -17,7 +22,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tb_usuario")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -63,4 +68,46 @@ public class User {
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_endereco")
     private Address endereco;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.tipoUsuario == TipoUserEnum.ADMIN)
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_ADVOGADO"),
+                    new SimpleGrantedAuthority("ROLE_COMUM"));
+        else if (this.tipoUsuario == TipoUserEnum.ADVOGADO)
+            return List.of(new SimpleGrantedAuthority("ROLE_ADVOGADO"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_COMUM"));
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

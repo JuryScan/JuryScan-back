@@ -44,8 +44,8 @@ public class UserAdvogadoController {
         return ResponseEntity.status(200).body(response);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<ApiResponse> addUser(@RequestBody UserAdvogadoCreateDTO userRequest){
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse> registerUserAdvogado(@RequestBody UserAdvogadoCreateDTO userRequest){
         UserAdvogadoResponseDTO createdUser = userAdvogadoService.createUserAdvogado(userRequest);
         ApiResponse response = new ApiResponse(true, "Usuário criado com sucesso", createdUser, 201);
         return ResponseEntity.status(201).body(response);
