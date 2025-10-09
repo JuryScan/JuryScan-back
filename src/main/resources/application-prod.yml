@@ -25,3 +25,6 @@ api:
   data-load:
     create-default-users: ${CREATE_DEFAULT_USERS:false}
     create-dump-data: ${CREATE_DUMP_DATA:false}
+  security:
+    token:
+      secret: ${JWT_SECRET}

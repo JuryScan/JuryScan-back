@@ -45,8 +45,8 @@ public class UserComumController {
         return ResponseEntity.status(200).body(response);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<ApiResponse> addUser(@RequestBody UserComumCreateDTO userRequest){
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse> registerUserComum(@RequestBody UserComumCreateDTO userRequest){
         UserComumResponseDTO createdUser = userComumService.createUserComum(userRequest);
         ApiResponse response = new ApiResponse(true, "Usuário criado com sucesso", createdUser, 201);
         return ResponseEntity.status(201).body(response);
