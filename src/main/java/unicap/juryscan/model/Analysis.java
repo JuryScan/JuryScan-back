@@ -30,4 +30,8 @@ public class Analysis {
 
     @OneToMany(mappedBy = "analise", cascade = CascadeType.ALL)
     private List<Failure> falhas;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario")
+    private User usuario;
 }

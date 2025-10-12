@@ -4,12 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import unicap.juryscan.model.Analysis;
+import unicap.juryscan.model.Failure;
 
 import java.util.UUID;
 
 @Repository
-public interface AnalysisRepository extends JpaRepository<Analysis, UUID> {
+public interface FailureRepository extends JpaRepository<Failure, UUID> {
 
-    Page<Analysis> findAllByUsuarioId(UUID usuarioId, Pageable pageable);
+    Page<Failure> findAllByAnaliseId(UUID analiseId, Pageable pageable);
 }

@@ -13,4 +13,5 @@ public class FailureCreateDTO {
     private SeveridadeFalhaEnum severidade;
     private String descricao;
     private String sugestaoCorrecao;
+    private Float confianca;
 }
