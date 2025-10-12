@@ -69,6 +69,9 @@ public class User implements UserDetails {
     @JoinColumn(name = "id_endereco")
     private Address endereco;
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Analysis> analises;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.tipoUsuario == TipoUserEnum.ADMIN)
