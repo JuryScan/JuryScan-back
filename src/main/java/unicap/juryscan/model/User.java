@@ -65,7 +65,7 @@ public class User implements UserDetails {
     private String numeroOab;
     private String experiencia;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_endereco")
     private Address endereco;
 

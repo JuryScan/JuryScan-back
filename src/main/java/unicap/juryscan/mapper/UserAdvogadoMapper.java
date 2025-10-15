@@ -6,6 +6,8 @@ import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
 
 import unicap.juryscan.model.User;
 
+import java.util.Optional;
+
 @Component
 public class UserAdvogadoMapper {
 
@@ -20,6 +22,10 @@ public class UserAdvogadoMapper {
         dto.setCpf(entity.getCpf());
         dto.setStatus(entity.getStatus());
         dto.setEmailVerificado(entity.getEmailVerificado());
+        dto.setEnderecoUrl(Optional
+                .ofNullable(entity.getEndereco())
+                .map(endereco -> "/addresses/"+entity.getId())
+                .orElse(null));
         dto.setDataCriacao(entity.getDataCriacao());
         dto.setDataUltimaAtualizacao(entity.getDataUltimaAtualizacao());
 

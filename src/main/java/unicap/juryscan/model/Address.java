@@ -30,6 +30,6 @@ public class Address {
     private String estado;
     private String cep;
 
-    @OneToMany(mappedBy = "endereco", cascade = CascadeType.ALL)
-    private List<User> usuarios;
+    @OneToOne(mappedBy = "endereco")
+    private User usuario;
 }

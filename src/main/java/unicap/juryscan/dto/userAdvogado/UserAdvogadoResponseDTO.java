@@ -22,6 +22,7 @@ public class UserAdvogadoResponseDTO {
     private String cpf;
     private UserStatusEnum status;
     private Boolean emailVerificado;
+    private String enderecoUrl;
 
     private String descricao;
     private String numeroOab;
