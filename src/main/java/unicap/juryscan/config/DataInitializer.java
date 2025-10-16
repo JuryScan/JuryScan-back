@@ -36,11 +36,13 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         if (createDefaultUsers){
+            System.out.println("🔧 COMMAND LINE RUNNER : Creating default users...");
             createDefaultUsers();
             System.out.println("🔧 COMMAND LINE RUNNER : Default users created.");
         }
 
         if (createDumpData){
+            System.out.println("🔧 COMMAND LINE RUNNER : Creating dump data...");
             createDumpData();
             System.out.println("🔧 COMMAND LINE RUNNER : Dump data created.");
         }
@@ -49,20 +51,20 @@ public class DataInitializer implements CommandLineRunner {
     private void createDefaultUsers(){
         // User comum
         UserComumCreateDTO userComumCreateDTO = new UserComumCreateDTO();
-        userComumCreateDTO.setNomeCompleto("user1");
+        userComumCreateDTO.setNomeCompleto("usuarioDev");
 
         userComumCreateDTO.setSenha("123");
         userComumCreateDTO.setCpf("123456789");
-        userComumCreateDTO.setEmail("user1@email.com");
+        userComumCreateDTO.setEmail("usuariodev@email.com");
         userComumCreateDTO.setTelefone("81999999999");
         userComumCreateDTO.setDataNascimento(Date.valueOf(LocalDate.of(2000,1,1)));
 
         // User advogado
         UserAdvogadoCreateDTO userAdvogadoCreateDTO = new UserAdvogadoCreateDTO();
-        userAdvogadoCreateDTO.setNomeCompleto("advogado1");
+        userAdvogadoCreateDTO.setNomeCompleto("advogadoDev");
         userAdvogadoCreateDTO.setSenha("123");
         userAdvogadoCreateDTO.setCpf("987654321");
-        userAdvogadoCreateDTO.setEmail("advogado1@email.com");
+        userAdvogadoCreateDTO.setEmail("advogadodev@email.com");
         userAdvogadoCreateDTO.setTelefone("81988888888");
         userAdvogadoCreateDTO.setDataNascimento(Date.valueOf(LocalDate.of(1990,1,1)));
         userAdvogadoCreateDTO.setDescricao("Advogado experiente");
