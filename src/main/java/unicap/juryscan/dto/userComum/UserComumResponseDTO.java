@@ -21,6 +21,8 @@ public class UserComumResponseDTO {
     private Date dataNascimento;
     private String cpf;
     private UserStatusEnum status;
+    // Não é estritamente o padrão HATEOAS
+    private String enderecoUrl;
     private Boolean emailVerificado;
     private Timestamp dataCriacao;
     private Timestamp dataUltimaAtualizacao;

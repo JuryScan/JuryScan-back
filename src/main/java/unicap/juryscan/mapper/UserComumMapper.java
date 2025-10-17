@@ -5,6 +5,8 @@ import unicap.juryscan.dto.userComum.UserComumCreateDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
 import unicap.juryscan.model.User;
 
+import java.util.Optional;
+
 @Component
 public class UserComumMapper {
 
@@ -19,6 +21,10 @@ public class UserComumMapper {
         dto.setCpf(entity.getCpf());
         dto.setStatus(entity.getStatus());
         dto.setEmailVerificado(entity.getEmailVerificado());
+        dto.setEnderecoUrl(Optional
+                .ofNullable(entity.getEndereco())
+                .map(endereco -> "/addresses/"+endereco.getId())
+                .orElse(null));
         dto.setDataCriacao(entity.getDataCriacao());
         dto.setDataUltimaAtualizacao(entity.getDataUltimaAtualizacao());
 
