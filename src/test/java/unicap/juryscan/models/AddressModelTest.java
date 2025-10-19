@@ -1,13 +1,8 @@
-package unicap.juryscan;
+package unicap.juryscan.models;
 
 import org.junit.jupiter.api.Test;
 import unicap.juryscan.enums.TipoEnderecoEnum;
 import unicap.juryscan.model.Address;
-import unicap.juryscan.model.User;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 

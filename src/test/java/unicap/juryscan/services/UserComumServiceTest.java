@@ -1,4 +1,4 @@
-package unicap.juryscan;
+package unicap.juryscan.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
