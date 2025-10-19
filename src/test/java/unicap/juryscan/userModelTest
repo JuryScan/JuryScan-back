@@ -1,0 +1,55 @@
+package unicap.juryscan;
+
+import org.junit.jupiter.api.Test;
+import unicap.juryscan.enums.TipoUserEnum;
+
+import java.sql.Date;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class userModelTest {
+
+    @Test
+    void testUserCreationAndFields() {
+      
+        User user = new User();
+        user.setNomeCompleto("João Silva");
+        user.setEmail("joao.silva@email.com");
+        user.setCpf("12345678900");
+        user.setDataNascimento(Date.valueOf("1990-01-01"));
+        user.setTipoUsuario(TipoUserEnum.ADMIN);
+
+        
+        assertEquals("João Silva", user.getNomeCompleto());
+        assertEquals("joao.silva@email.com", user.getEmail());
+        assertEquals("12345678900", user.getCpf());
+        assertEquals(Date.valueOf("1990-01-01"), user.getDataNascimento());
+        assertEquals(TipoUserEnum.ADMIN, user.getTipoUsuario());
+
+       
+        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
+        assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+        assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADVOGADO")));
+        assertTrue(authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_COMUM")));
+    }
+
+    @Test
+    void testUserCredentials() {
+        User user = new User();
+        user.setEmail("teste@email.com");
+        user.setSenha("123456");
+
+       
+        assertEquals("teste@email.com", user.getUsername());
+        assertEquals("123456", user.getPassword());
+
+        
+        assertTrue(user.isAccountNonExpired());
+        assertTrue(user.isAccountNonLocked());
+        assertTrue(user.isCredentialsNonExpired());
+        assertTrue(user.isEnabled());
+    }
+}
