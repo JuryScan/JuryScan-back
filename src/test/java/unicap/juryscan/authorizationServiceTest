@@ -1,0 +1,42 @@
+package unicap.juryscan;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import unicap.juryscan.model.User;
+import unicap.juryscan.repository.UserRepository;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class authorizationServiceTest {
+
+    @Test
+    void testLoadUserByUsernameFound() {
+      
+        UserRepository repo = mock(UserRepository.class);
+        User user = new User();
+        user.setEmail("teste@email.com");
+        when(repo.findByEmailIgnoreCase("teste@email.com")).thenReturn(user);
+
+       
+        authorizationService service = new authorizationService(repo);
+        UserDetails result = service.loadUserByUsername("teste@email.com");
+
+        assertEquals("teste@email.com", result.getUsername());
+        verify(repo, times(1)).findByEmailIgnoreCase("teste@email.com");
+    }
+
+    @Test
+    void testLoadUserByUsernameNotFound() {
+        UserRepository repo = mock(UserRepository.class);
+        when(repo.findByEmailIgnoreCase("naoexiste@email.com")).thenReturn(null);
+
+        authorizationService service = new authorizationService(repo);
+
+        assertThrows(UsernameNotFoundException.class, () -> {
+            service.loadUserByUsername("naoexiste@email.com");
+        });
+    }
+}
