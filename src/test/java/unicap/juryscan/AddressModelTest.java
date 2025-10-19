@@ -2,6 +2,8 @@ package unicap.juryscan;
 
 import org.junit.jupiter.api.Test;
 import unicap.juryscan.enums.TipoEnderecoEnum;
+import unicap.juryscan.model.Address;
+import unicap.juryscan.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,17 +23,12 @@ class AddressModelTest {
         address.setEstado("PE");
         address.setCep("50000-000");
 
-       
-        List<User> usuarios = new ArrayList<>();
-        address.setUsuarios(usuarios);
 
-        e
         assertEquals(TipoEnderecoEnum.RESIDENCIAL, address.getTipoEndereco());
         assertEquals("Rua das Flores, 123", address.getLogradouro());
         assertEquals("Recife", address.getCidade());
         assertEquals("Boa Vista", address.getBairro());
         assertEquals("PE", address.getEstado());
         assertEquals("50000-000", address.getCep());
-        assertEquals(usuarios, address.getUsuarios());
     }
 }

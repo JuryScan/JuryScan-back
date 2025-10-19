@@ -18,6 +18,7 @@ import unicap.juryscan.exception.custom.UserAlreadyExistsException;
 import unicap.juryscan.mapper.UserComumMapper;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.UserRepository;
+import unicap.juryscan.service.userComum.UserComumService;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class userComumServiceTest {
+class UserComumServiceTest {
 
     @Mock
     private UserRepository repo;

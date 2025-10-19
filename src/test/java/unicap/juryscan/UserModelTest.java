@@ -7,10 +7,11 @@ import java.sql.Date;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
+import unicap.juryscan.model.User;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class userModelTest {
+class UserModelTest {
 
     @Test
     void testUserCreationAndFields() {
