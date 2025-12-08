@@ -2,13 +2,11 @@ spring:
   application:
     name: JuryScan-API-prod
   datasource:
-    url: jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DATABASE}
-    username: ${PG_USERNAME}
-    password: ${PG_PASSWORD}
+    url: ${PG_URL}
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: validate # Only validate the db schema
+      ddl-auto: create # Only validate the db schema
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   flyway:

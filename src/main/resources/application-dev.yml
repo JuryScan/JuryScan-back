@@ -3,8 +3,8 @@ spring:
     name: JuryScan-API-dev
   datasource:
     url: jdbc:h2:mem:h2db # or jdbc:h2:file:/~h2db to persist data
-    username: ${H2_USER:root}
-    password: ${H2_PASSWORD:root}
+    username: ${H2_USER:dev}
+    password: ${H2_PASSWORD:dev}
     driverClassName: org.h2.Driver
   jpa:
     show-sql: true
@@ -20,6 +20,8 @@ spring:
       path: /h2-console
       settings:
         web-allow-others: false
+  flyway:
+    enabled: false
 
 server:
   port: ${SERVER_PORT:8080}
