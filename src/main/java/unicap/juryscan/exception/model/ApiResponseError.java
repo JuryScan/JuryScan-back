@@ -16,4 +16,10 @@ public class ApiResponseError {
         this.error = e.getStackTrace()[0].toString();
         this.message = e.getMessage();
     }
+
+    public ApiResponseError(int status, String message) {
+        this.status = status;
+        this.message = message;
+        this.error = null;
+    }
 }
