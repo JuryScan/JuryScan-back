@@ -1,4 +1,4 @@
-package unicap.juryscan;
+package unicap.juryscan.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,9 @@ import unicap.juryscan.model.Address;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.AddressRepository;
 import unicap.juryscan.repository.UserRepository;
+import unicap.juryscan.service.address.AddressService;
+import unicap.juryscan.service.address.IAddressService;
+
 
 import java.util.Optional;
 import java.util.UUID;
