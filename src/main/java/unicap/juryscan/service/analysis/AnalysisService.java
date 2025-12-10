@@ -3,6 +3,7 @@ package unicap.juryscan.service.analysis;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import unicap.juryscan.dto.ai.AIResponseDTO;
 import unicap.juryscan.dto.analysis.AnalysisCreateDTO;
 import unicap.juryscan.dto.analysis.AnalysisResponseDTO;
 import unicap.juryscan.dto.pagination.PageResponse;
@@ -12,6 +13,8 @@ import unicap.juryscan.model.Analysis;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.AnalysisRepository;
 import unicap.juryscan.repository.UserRepository;
+import unicap.juryscan.service.serviceAI.GeminiAIService;
+import unicap.juryscan.service.serviceAI.IGenericAIService;
 
 import java.util.UUID;
 //TODO dependendo da interface frontend, retornar dados do usuário em certas consultas
@@ -22,10 +25,13 @@ public class AnalysisService implements IAnalysisService {
     private final AnalysisRepository analysisRepository;
     private final AnalysisMapper analysisMapper;
 
-    public AnalysisService(AnalysisRepository analysisRepository, AnalysisMapper analysisMapper, UserRepository userRepository) {
+    private final IGenericAIService genericAIService;
+
+    public AnalysisService(AnalysisRepository analysisRepository, AnalysisMapper analysisMapper, UserRepository userRepository, IGenericAIService genericAIService) {
         this.analysisRepository = analysisRepository;
         this.analysisMapper = analysisMapper;
         this.userRepository = userRepository;
+        this.genericAIService = genericAIService;
     }
 
     @Override
@@ -61,11 +67,13 @@ public class AnalysisService implements IAnalysisService {
     }
 
     @Override
-    public AnalysisResponseDTO createAnalysis(UUID userId, AnalysisCreateDTO analysisCreateDTO) {
+    public AnalysisResponseDTO createAnalysis(UUID userId, byte[] documentBytes) {
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
-        Analysis analysis = analysisMapper.toEntity(analysisCreateDTO);
+        AIResponseDTO aiResponse = genericAIService.analyzeDocument(documentBytes);
+
+        Analysis analysis = analysisMapper.toEntity(aiResponse);
         analysis.setUsuario(user);
         analysis = analysisRepository.save(analysis);
 

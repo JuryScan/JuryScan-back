@@ -12,7 +12,7 @@ public interface IAnalysisService {
 
     PageResponse<AnalysisResponseDTO> getAllAnalysisByUserId(UUID userId, Pageable pageable);
 
-    AnalysisResponseDTO createAnalysis(UUID userId, AnalysisCreateDTO analysisCreateDTO);
+    AnalysisResponseDTO createAnalysis(UUID userId, byte[] documentBytes);
 
     AnalysisResponseDTO getAnalysisById(UUID analysisId);
 }

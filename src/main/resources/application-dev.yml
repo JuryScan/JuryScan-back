@@ -42,3 +42,8 @@ api:
   security:
     token:
       secret: ${JWT_SECRET}
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+  model: gemini-2.5-flash
