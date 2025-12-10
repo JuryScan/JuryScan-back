@@ -12,4 +12,5 @@ public class LoginResponseDTO {
     private String message;
     private boolean success;
     private int status;
+    private UserAuthenticatedDTO user;
 }

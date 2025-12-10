@@ -38,13 +38,33 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/swagger-ui/index.html/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-resources/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/webjars/**").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/comum/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/advogado/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/comum/**").hasRole("COMUM")
+
+                        .requestMatchers(HttpMethod.GET, "api/v1/auth/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/comum/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "api/v1/users/advogado/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "api/v1/analyses/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "api/v1/failures/**").authenticated()
+
+                        .requestMatchers(HttpMethod.PUT, "api/v1/users/comum/**").hasAnyRole("COMUM", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "api/v1/users/comum/**").hasAnyRole("COMUM", "ADMIN")
+
+                        .requestMatchers(HttpMethod.PUT, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
+
+                        .requestMatchers("api/v1/addresses/**").authenticated()
+
+                        .requestMatchers(HttpMethod.POST, "api/v1/analyses/**").authenticated()
+
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
