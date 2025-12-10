@@ -21,7 +21,7 @@ public class Analysis {
 
     private String titulo;
 
-    @Column(name = "descricao_geral")
+    @Column(name = "descricao_geral", columnDefinition = "TEXT")
     private String descricaoGeral;
 
     @Column(name = "data_criacao")

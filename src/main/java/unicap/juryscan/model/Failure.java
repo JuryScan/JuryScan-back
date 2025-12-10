@@ -25,11 +25,12 @@ public class Failure {
     @Enumerated(EnumType.STRING)
     private SeveridadeFalhaEnum severidade;
 
+    @Column(columnDefinition = "TEXT")
     private String descricao;
 
     private Float confianca;
 
-    @Column(name = "sugestao_correcao")
+    @Column(name = "sugestao_correcao", columnDefinition = "TEXT")
     private String sugestaoCorrecao;
 
     @ManyToOne(fetch = FetchType.LAZY)
