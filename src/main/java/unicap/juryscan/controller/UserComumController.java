@@ -1,12 +1,12 @@
 package unicap.juryscan.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
+import unicap.juryscan.dto.userComum.UserComumRegisteredDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
 
 import unicap.juryscan.service.userComum.UserComumService;
@@ -47,7 +47,7 @@ public class UserComumController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUserComum(@RequestBody UserComumCreateDTO userRequest){
-        UserComumResponseDTO createdUser = userComumService.createUserComum(userRequest);
+        UserComumRegisteredDTO createdUser = userComumService.createUserComum(userRequest);
         ApiResponse response = new ApiResponse(true, "Usuário criado com sucesso", createdUser, 201);
         return ResponseEntity.status(201).body(response);
     }

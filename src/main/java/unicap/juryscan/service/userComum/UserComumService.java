@@ -4,8 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import unicap.juryscan.dto.auth.AuthenticationDTO;
+import unicap.juryscan.dto.auth.LoginResponseDTO;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
+import unicap.juryscan.dto.userComum.UserComumRegisteredDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
 import unicap.juryscan.enums.TipoUserEnum;
 import unicap.juryscan.enums.UserStatusEnum;
@@ -14,6 +17,7 @@ import unicap.juryscan.exception.custom.UserAlreadyExistsException;
 import unicap.juryscan.mapper.UserComumMapper;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.UserRepository;
+import unicap.juryscan.service.auth.AuthenticationService;
 
 import java.util.UUID;
 
@@ -24,10 +28,13 @@ public class UserComumService implements IUserComumService {
     private final UserComumMapper userComumMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserComumService(UserRepository userRepository, UserComumMapper userComumMapper, PasswordEncoder passwordEncoder) {
+    private final AuthenticationService authenticationService;
+
+    public UserComumService(UserRepository userRepository, UserComumMapper userComumMapper, PasswordEncoder passwordEncoder, AuthenticationService authenticationService) {
         this.userRepository = userRepository;
         this.userComumMapper = userComumMapper;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationService = authenticationService;
     }
 
     @Override
@@ -48,7 +55,7 @@ public class UserComumService implements IUserComumService {
     }
 
     @Override
-    public UserComumResponseDTO createUserComum(UserComumCreateDTO userCreateDTO) {
+    public UserComumRegisteredDTO createUserComum(UserComumCreateDTO userCreateDTO) {
         if (userRepository.findByEmailIgnoreCase(userCreateDTO.getEmail()) != null) {
             throw new UserAlreadyExistsException("Usuário com esse email já existe");
         }
@@ -62,7 +69,9 @@ public class UserComumService implements IUserComumService {
         userMapped.setEmailVerificado(false);
         userRepository.save(userMapped);
 
-        return userComumMapper.toResponseDTO(userMapped);
+        LoginResponseDTO loginResponse = authenticationService.login(new AuthenticationDTO(userMapped.getEmail(), userCreateDTO.getSenha()));
+
+        return new UserComumRegisteredDTO(loginResponse.getToken(), userComumMapper.toResponseDTO(userMapped));
     }
 
     @Override

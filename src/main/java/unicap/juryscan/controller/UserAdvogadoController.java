@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
+import unicap.juryscan.dto.userAdvogado.UserAdvogadoRegisteredDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
 import unicap.juryscan.service.userAdvogado.UserAdvogadoService;
 import unicap.juryscan.utils.ApiResponse;
@@ -46,7 +47,7 @@ public class UserAdvogadoController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUserAdvogado(@RequestBody UserAdvogadoCreateDTO userRequest){
-        UserAdvogadoResponseDTO createdUser = userAdvogadoService.createUserAdvogado(userRequest);
+        UserAdvogadoRegisteredDTO createdUser = userAdvogadoService.createUserAdvogado(userRequest);
         ApiResponse response = new ApiResponse(true, "Usuário criado com sucesso", createdUser, 201);
         return ResponseEntity.status(201).body(response);
     }

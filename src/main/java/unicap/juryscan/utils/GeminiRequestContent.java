@@ -21,7 +21,7 @@ public class GeminiRequestContent {
                                 .items(Schema.builder()
                                         .type("object")
                                         .properties(Map.of(
-                                                "titulo", Schema.builder().type("string").build(),
+                                                "titulo", Schema.builder().type("string").maxLength(50L).build(),
                                                 "severidade", Schema.builder().type("string").enum_("ALTA", "MEDIA", "BAIXA", "INFO").build(),
                                                 "descricao", Schema.builder().type("string").build(),
                                                 "sugestaoCorrecao", Schema.builder().type("string").build(),

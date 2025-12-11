@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import unicap.juryscan.dto.auth.LoginResponseDTO;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
@@ -18,6 +19,7 @@ import unicap.juryscan.exception.custom.UserAlreadyExistsException;
 import unicap.juryscan.mapper.UserComumMapper;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.UserRepository;
+import unicap.juryscan.service.auth.AuthenticationService;
 import unicap.juryscan.service.userComum.UserComumService;
 
 import java.util.List;
@@ -37,6 +39,9 @@ class UserComumServiceTest {
 
     @Mock
     private PasswordEncoder encoder;
+
+    @Mock
+    private AuthenticationService auth;
 
     @InjectMocks
     private UserComumService service;
@@ -60,10 +65,15 @@ class UserComumServiceTest {
         dto.setEmail("novo@teste.com");
         dto.setSenha("123");
 
+        LoginResponseDTO loginResponse = new LoginResponseDTO();
+        loginResponse.setToken("mock-jwt-token");
+
         when(repo.findByEmailIgnoreCase(dto.getEmail())).thenReturn(null);
         when(mapper.toEntity(dto)).thenReturn(user);
         when(encoder.encode("123")).thenReturn("abc");
         when(repo.save(user)).thenReturn(user);
+        when(mapper.toResponseDTO(user)).thenReturn(new UserComumResponseDTO());
+        when(auth.login(any())).thenReturn(loginResponse);
         when(mapper.toResponseDTO(user)).thenReturn(new UserComumResponseDTO());
 
         var res = service.createUserComum(dto);
