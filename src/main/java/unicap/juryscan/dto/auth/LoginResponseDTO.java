@@ -13,4 +13,7 @@ public class LoginResponseDTO {
     private boolean success;
     private int status;
     private UserAuthenticatedDTO user;
+
+    public LoginResponseDTO(String token123) {
+    }
 }
