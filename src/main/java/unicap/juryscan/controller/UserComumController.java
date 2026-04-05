@@ -10,7 +10,7 @@ import unicap.juryscan.dto.userComum.UserComumRegisteredDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
 
 import unicap.juryscan.service.userComum.UserComumService;
-import unicap.juryscan.utils.ApiResponse;
+import unicap.juryscan.infra.ApiResponse;
 
 import java.util.UUID;
 

@@ -8,7 +8,7 @@ import unicap.juryscan.dto.auth.LoginResponseDTO;
 import unicap.juryscan.dto.auth.UserAuthenticatedDTO;
 import unicap.juryscan.mapper.UserMapper;
 import unicap.juryscan.service.auth.AuthenticationService;
-import unicap.juryscan.utils.ApiResponse;
+import unicap.juryscan.infra.ApiResponse;
 
 @RestController
 @RequestMapping("${api.uri}/auth")

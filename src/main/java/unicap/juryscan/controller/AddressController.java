@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import unicap.juryscan.dto.address.AddressCreateDTO;
 import unicap.juryscan.dto.address.AddressResponseDTO;
 import unicap.juryscan.service.address.AddressService;
-import unicap.juryscan.utils.ApiResponse;
+import unicap.juryscan.infra.ApiResponse;
 
 import java.util.UUID;
 

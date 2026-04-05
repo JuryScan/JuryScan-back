@@ -10,17 +10,15 @@ import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoRegisteredDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
-import unicap.juryscan.dto.userComum.UserComumRegisteredDTO;
 import unicap.juryscan.enums.TipoUserEnum;
 import unicap.juryscan.enums.UserStatusEnum;
-import unicap.juryscan.exception.custom.ResourceNotFoundException;
-import unicap.juryscan.exception.custom.UserAlreadyExistsException;
+import unicap.juryscan.exception.ResourceNotFoundException;
+import unicap.juryscan.exception.UserAlreadyExistsException;
 import unicap.juryscan.mapper.UserAdvogadoMapper;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.UserRepository;
 import unicap.juryscan.service.auth.AuthenticationService;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service

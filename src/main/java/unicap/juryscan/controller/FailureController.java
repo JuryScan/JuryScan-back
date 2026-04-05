@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import unicap.juryscan.dto.failure.FailureResponseDTO;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.service.failure.IFailureService;
-import unicap.juryscan.utils.ApiResponse;
+import unicap.juryscan.infra.ApiResponse;
 
 import java.util.UUID;
 

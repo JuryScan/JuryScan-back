@@ -1,6 +1,5 @@
 package unicap.juryscan.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,7 @@ import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoRegisteredDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
 import unicap.juryscan.service.userAdvogado.UserAdvogadoService;
-import unicap.juryscan.utils.ApiResponse;
+import unicap.juryscan.infra.ApiResponse;
 
 import java.util.UUID;
 
