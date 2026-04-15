@@ -68,7 +68,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Criação dos triggers ====================================
-CREATE TRIGGER TRG_atualizar_data_atualizacao
+CREATE TRIGGER TRG_atualizar_data_atualizacao_usuario
     BEFORE UPDATE ON tb_usuario
     FOR EACH ROW
     EXECUTE FUNCTION atualizar_data_atualizacao();
