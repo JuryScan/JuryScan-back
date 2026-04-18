@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import unicap.juryscan.dto.payment.ProductRequest;
 import unicap.juryscan.dto.payment.StripeResponse;
 
+import java.util.UUID;
+
 @Service
 public class StripeService implements IStripeService{
 
@@ -19,7 +21,7 @@ public class StripeService implements IStripeService{
     @Value("${stripe.api.key}")
     private String apiKey;
 
-    public StripeResponse checkoutProducts(ProductRequest productRequest){
+    public StripeResponse checkoutProducts(ProductRequest productRequest, UUID userId){
         Stripe.apiKey = apiKey;
         SessionCreateParams.LineItem.PriceData.ProductData productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
                 .setName(productRequest.getName())
@@ -38,12 +40,14 @@ public class StripeService implements IStripeService{
 
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:3000/success")
-                .setCancelUrl("http://localhost:3000/cancel")
+                .setSuccessUrl("http://localhost:3000/static/success")
+                .setCancelUrl("http://localhost:3000/static/cancel")
+                .setClientReferenceId(userId.toString())
                 .addLineItem(lineItem)
                 .build();
 
         Session session = null;
+        //TODO adicionar global exception handler
         try {
             session = Session.create(params);
         } catch(StripeException e){

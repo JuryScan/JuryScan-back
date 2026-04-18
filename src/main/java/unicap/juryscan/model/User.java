@@ -52,6 +52,13 @@ public class User implements UserDetails {
 
     private Boolean emailVerificado;
 
+    // mappedby indica ao Hibernate que o mapeamento "dono" da relação está na outra classe
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Wallet carteira;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> transacoes;
+
     @Column(name = "data_criacao")
     @CreationTimestamp
     private Timestamp dataCriacao;

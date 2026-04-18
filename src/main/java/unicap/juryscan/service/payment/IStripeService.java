@@ -4,6 +4,8 @@ package unicap.juryscan.service.payment;
 import unicap.juryscan.dto.payment.ProductRequest;
 import unicap.juryscan.dto.payment.StripeResponse;
 
+import java.util.UUID;
+
 public interface IStripeService {
-    public StripeResponse checkoutProducts(ProductRequest productRequest);
+    StripeResponse checkoutProducts(ProductRequest productRequest, UUID clientId);
 }
