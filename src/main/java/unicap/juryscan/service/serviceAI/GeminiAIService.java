@@ -17,9 +17,9 @@ import java.util.List;
 @Service
 public class GeminiAIService implements IGenericAIService {
 
-    @Value("${gemini.api.key}")
+    @Value("${google.gemini.api.key}")
     private String apiKey;
-    @Value("${gemini.model}")
+    @Value("${google.gemini.model}")
     private String model;
     private final ObjectMapper mapper = new ObjectMapper();
 

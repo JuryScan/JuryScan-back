@@ -9,19 +9,25 @@ import unicap.juryscan.dto.auth.UserAuthenticatedDTO;
 import unicap.juryscan.mapper.UserMapper;
 import unicap.juryscan.service.auth.AuthenticationService;
 import unicap.juryscan.infra.ApiResponse;
+import unicap.juryscan.service.reCaptcha.RecaptchaService;
 
 @RestController
 @RequestMapping("${api.uri}/auth")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final RecaptchaService recaptchaService;
 
-    public AuthenticationController(AuthenticationService authenticationService, UserMapper userMapper) {
+    public AuthenticationController(AuthenticationService authenticationService, UserMapper userMapper,  RecaptchaService recaptchaService) {
         this.authenticationService = authenticationService;
+        this.recaptchaService = recaptchaService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO authRequest){
+        // valida primeiro no captcha
+        recaptchaService.isValid(authRequest.getRecaptchaToken());
+
         LoginResponseDTO response = authenticationService.login(authRequest);
         return ResponseEntity.status(200).body(response);
     }
