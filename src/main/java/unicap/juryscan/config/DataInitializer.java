@@ -1,8 +1,9 @@
 package unicap.juryscan.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
@@ -13,8 +14,6 @@ import unicap.juryscan.service.userComum.UserComumService;
 import java.sql.Date;
 import java.time.LocalDate;
 
-//TODO Fazer initializer para criar tres tipos de usuario em ambiente de desenvolvimento, comum, advogado e admin
-//TODO adicionar password encoder
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -27,6 +26,8 @@ public class DataInitializer implements CommandLineRunner {
     private final UserComumService userComumService;
     private final UserAdvogadoService userAdvogadoService;
 
+    private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
+
     public DataInitializer(UserComumService userComumService, UserAdvogadoService userAdminService) {
         this.userAdvogadoService = userAdminService;
         this.userComumService = userComumService;
@@ -36,15 +37,15 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         if (createDefaultUsers){
-            System.out.println("🔧 COMMAND LINE RUNNER : Creating default users...");
+            logger.info("COMMAND LINE RUNNER : Creating default users...");
             createDefaultUsers();
-            System.out.println("🔧 COMMAND LINE RUNNER : Default users created.");
+            logger.info("COMMAND LINE RUNNER : Default users created.");
         }
 
         if (createDumpData){
-            System.out.println("🔧 COMMAND LINE RUNNER : Creating dump data...");
+            logger.info("COMMAND LINE RUNNER : Creating dump data...");
             createDumpData();
-            System.out.println("🔧 COMMAND LINE RUNNER : Dump data created.");
+            logger.info("COMMAND LINE RUNNER : Dump data created.");
         }
     }
 

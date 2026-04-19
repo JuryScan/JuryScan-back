@@ -1,15 +1,16 @@
 package unicap.juryscan.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
+import unicap.juryscan.dto.userAdvogado.UserAdvogadoRegisteredDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
+import unicap.juryscan.service.reCaptcha.RecaptchaService;
 import unicap.juryscan.service.userAdvogado.UserAdvogadoService;
-import unicap.juryscan.utils.ApiResponse;
+import unicap.juryscan.infra.ApiResponse;
 
 import java.util.UUID;
 
@@ -18,9 +19,11 @@ import java.util.UUID;
 public class UserAdvogadoController {
 
     private final UserAdvogadoService userAdvogadoService;
+    private final RecaptchaService recaptchaService;
 
-    public UserAdvogadoController(UserAdvogadoService userAdvogadoService) {
+    public UserAdvogadoController(UserAdvogadoService userAdvogadoService,  RecaptchaService recaptchaService) {
         this.userAdvogadoService = userAdvogadoService;
+        this.recaptchaService = recaptchaService;
     }
 
     @GetMapping("/")
@@ -46,7 +49,10 @@ public class UserAdvogadoController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUserAdvogado(@RequestBody UserAdvogadoCreateDTO userRequest){
-        UserAdvogadoResponseDTO createdUser = userAdvogadoService.createUserAdvogado(userRequest);
+        // valida primeiro no captcha
+        recaptchaService.isValid(userRequest.getRecaptchaToken());
+
+        UserAdvogadoRegisteredDTO createdUser = userAdvogadoService.createUserAdvogado(userRequest);
         ApiResponse response = new ApiResponse(true, "Usuário criado com sucesso", createdUser, 201);
         return ResponseEntity.status(201).body(response);
     }

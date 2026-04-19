@@ -11,4 +11,6 @@ import lombok.*;
 public class AuthenticationDTO {
     private String email;
     private String password;
+
+    private String recaptchaToken;
 }

@@ -7,14 +7,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import unicap.juryscan.dto.address.AddressCreateDTO;
 import unicap.juryscan.dto.address.AddressResponseDTO;
-import unicap.juryscan.exception.custom.ResourceNotFoundException;
+import unicap.juryscan.exception.ResourceNotFoundException;
 import unicap.juryscan.mapper.AddressMapper;
 import unicap.juryscan.model.Address;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.AddressRepository;
 import unicap.juryscan.repository.UserRepository;
 import unicap.juryscan.service.address.AddressService;
-import unicap.juryscan.service.address.IAddressService;
 
 
 import java.util.Optional;

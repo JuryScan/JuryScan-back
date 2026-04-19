@@ -12,7 +12,7 @@ import unicap.juryscan.dto.analysis.AnalysisResponseDTO;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.service.analysis.IAnalysisService;
 import unicap.juryscan.service.serviceAI.IGenericAIService;
-import unicap.juryscan.utils.ApiResponse;
+import unicap.juryscan.infra.ApiResponse;
 
 import java.util.UUID;
 

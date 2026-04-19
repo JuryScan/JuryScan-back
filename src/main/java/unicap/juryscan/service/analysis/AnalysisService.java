@@ -4,16 +4,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import unicap.juryscan.dto.ai.AIResponseDTO;
-import unicap.juryscan.dto.analysis.AnalysisCreateDTO;
 import unicap.juryscan.dto.analysis.AnalysisResponseDTO;
 import unicap.juryscan.dto.pagination.PageResponse;
-import unicap.juryscan.exception.custom.ResourceNotFoundException;
+import unicap.juryscan.exception.ResourceNotFoundException;
 import unicap.juryscan.mapper.AnalysisMapper;
 import unicap.juryscan.model.Analysis;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.AnalysisRepository;
 import unicap.juryscan.repository.UserRepository;
-import unicap.juryscan.service.serviceAI.GeminiAIService;
 import unicap.juryscan.service.serviceAI.IGenericAIService;
 
 import java.util.UUID;

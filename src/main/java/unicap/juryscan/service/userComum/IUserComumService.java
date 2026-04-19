@@ -3,13 +3,14 @@ package unicap.juryscan.service.userComum;
 import org.springframework.data.domain.Pageable;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
+import unicap.juryscan.dto.userComum.UserComumRegisteredDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
 
 import java.util.UUID;
 
 public interface IUserComumService {
 
-    UserComumResponseDTO createUserComum(UserComumCreateDTO user);
+    UserComumRegisteredDTO createUserComum(UserComumCreateDTO user);
 
     PageResponse<UserComumResponseDTO> getAllUserComums(Pageable pageable);
 

@@ -5,12 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.*;
 
 import unicap.juryscan.dto.analysis.AnalysisCreateDTO;
 import unicap.juryscan.dto.analysis.AnalysisResponseDTO;
-import unicap.juryscan.dto.pagination.PageResponse;
-import unicap.juryscan.exception.custom.ResourceNotFoundException;
+import unicap.juryscan.exception.ResourceNotFoundException;
 import unicap.juryscan.mapper.AnalysisMapper;
 import unicap.juryscan.model.Analysis;
 import unicap.juryscan.model.User;
@@ -20,7 +18,6 @@ import unicap.juryscan.service.analysis.AnalysisService;
 import unicap.juryscan.service.serviceAI.IGenericAIService;
 import unicap.juryscan.dto.ai.AIResponseDTO;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

@@ -2,26 +2,19 @@ spring:
   application:
     name: JuryScan-API-dev
   datasource:
-    url: jdbc:h2:mem:h2db # or jdbc:h2:file:/~h2db to persist data
-    username: ${H2_USER:dev}
-    password: ${H2_PASSWORD:dev}
-    driverClassName: org.h2.Driver
+    url: ${PG_URL_DEV}
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate # Only validate the db schema
     properties:
       hibernate:
         format_sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        web-allow-others: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
   flyway:
-    enabled: false
+    enabled: true
+    default-schema: public
 
 server:
   port: ${SERVER_PORT:8080}
@@ -43,7 +36,13 @@ api:
     token:
       secret: ${JWT_SECRET}
 
-gemini:
-  api:
-    key: ${GEMINI_API_KEY}
-  model: gemini-2.5-flash
+google:
+  gemini:
+    api:
+      key: ${GEMINI_API_KEY}
+    model: gemini-2.5-flash
+  recaptcha:
+    secret: ${GOOGLE_RECAPTCHA_SECRET_KEY}
+
+stripe.api:
+    key: ${STRIPE_SECRET_KEY}

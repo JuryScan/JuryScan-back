@@ -3,7 +3,7 @@ package unicap.juryscan.service.address;
 import org.springframework.stereotype.Service;
 import unicap.juryscan.dto.address.AddressCreateDTO;
 import unicap.juryscan.dto.address.AddressResponseDTO;
-import unicap.juryscan.exception.custom.ResourceNotFoundException;
+import unicap.juryscan.exception.ResourceNotFoundException;
 import unicap.juryscan.mapper.AddressMapper;
 import unicap.juryscan.model.Address;
 import unicap.juryscan.model.User;

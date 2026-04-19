@@ -4,18 +4,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import unicap.juryscan.dto.auth.AuthenticationDTO;
+import unicap.juryscan.dto.auth.LoginResponseDTO;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
+import unicap.juryscan.dto.userAdvogado.UserAdvogadoRegisteredDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
 import unicap.juryscan.enums.TipoUserEnum;
 import unicap.juryscan.enums.UserStatusEnum;
-import unicap.juryscan.exception.custom.ResourceNotFoundException;
-import unicap.juryscan.exception.custom.UserAlreadyExistsException;
+import unicap.juryscan.exception.ResourceNotFoundException;
+import unicap.juryscan.exception.UserAlreadyExistsException;
 import unicap.juryscan.mapper.UserAdvogadoMapper;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.UserRepository;
+import unicap.juryscan.service.auth.AuthenticationService;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,14 +28,17 @@ public class UserAdvogadoService implements IUserAdvogadoService {
     private final UserAdvogadoMapper userAdvogadoMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserAdvogadoService(UserRepository userRepository, UserAdvogadoMapper userAdvogadoMapper, PasswordEncoder passwordEncoder) {
+    private final AuthenticationService authenticationService;
+
+    public UserAdvogadoService(UserRepository userRepository, UserAdvogadoMapper userAdvogadoMapper, PasswordEncoder passwordEncoder, AuthenticationService authenticationService) {
         this.userRepository = userRepository;
         this.userAdvogadoMapper = userAdvogadoMapper;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationService = authenticationService;
     }
 
     @Override
-    public UserAdvogadoResponseDTO createUserAdvogado(UserAdvogadoCreateDTO userCreateDTO) {
+    public UserAdvogadoRegisteredDTO createUserAdvogado(UserAdvogadoCreateDTO userCreateDTO) {
         if (userRepository.findByEmailIgnoreCase(userCreateDTO.getEmail()) != null) {
             throw new UserAlreadyExistsException("Usuário com esse email já existe");
         }
@@ -46,7 +52,13 @@ public class UserAdvogadoService implements IUserAdvogadoService {
         userMapped.setEmailVerificado(false);
         userRepository.save(userMapped);
 
-        return userAdvogadoMapper.toResponseDTO(userMapped);
+        AuthenticationDTO authDTO = AuthenticationDTO.builder()
+                .email(userMapped.getEmail())
+                .password(userCreateDTO.getSenha())
+                .build();
+        LoginResponseDTO loginResponse = authenticationService.login(authDTO);
+
+        return new UserAdvogadoRegisteredDTO(loginResponse.getToken(), userAdvogadoMapper.toResponseDTO(userMapped));
     }
 
     @Override

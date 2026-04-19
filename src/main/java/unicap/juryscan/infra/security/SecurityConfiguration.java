@@ -24,8 +24,6 @@ public class SecurityConfiguration {
     private final CorsConfigurationSource corsConfigurationSource;
     private final SecurityFilter securityFilter;
 
-    private final String BASEURI = "/api/v1";
-
     public SecurityConfiguration(CorsConfig corsConfig, SecurityFilter securityFilter) {
         this.corsConfigurationSource = corsConfig.corsConfigurationSource();
         this.securityFilter = securityFilter;
@@ -60,6 +58,10 @@ public class SecurityConfiguration {
 
                         .requestMatchers(HttpMethod.PUT, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "api/v1/product-checkout/**").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/webhook/**").permitAll()
 
                         .requestMatchers("api/v1/addresses/**").authenticated()
 

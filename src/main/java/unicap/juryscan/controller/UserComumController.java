@@ -1,16 +1,17 @@
 package unicap.juryscan.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
+import unicap.juryscan.dto.userComum.UserComumRegisteredDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
 
+import unicap.juryscan.service.reCaptcha.RecaptchaService;
 import unicap.juryscan.service.userComum.UserComumService;
-import unicap.juryscan.utils.ApiResponse;
+import unicap.juryscan.infra.ApiResponse;
 
 import java.util.UUID;
 
@@ -19,9 +20,11 @@ import java.util.UUID;
 public class UserComumController {
 
     private final UserComumService userComumService;
+    private final RecaptchaService recaptchaService;
 
-    public UserComumController(UserComumService userComumService) {
+    public UserComumController(UserComumService userComumService,  RecaptchaService recaptchaService) {
         this.userComumService = userComumService;
+        this.recaptchaService = recaptchaService;
     }
 
     @GetMapping("/")
@@ -47,7 +50,10 @@ public class UserComumController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUserComum(@RequestBody UserComumCreateDTO userRequest){
-        UserComumResponseDTO createdUser = userComumService.createUserComum(userRequest);
+        // valida primeiro no captcha
+        recaptchaService.isValid(userRequest.getRecaptchaToken());
+
+        UserComumRegisteredDTO createdUser = userComumService.createUserComum(userRequest);
         ApiResponse response = new ApiResponse(true, "Usuário criado com sucesso", createdUser, 201);
         return ResponseEntity.status(201).body(response);
     }
