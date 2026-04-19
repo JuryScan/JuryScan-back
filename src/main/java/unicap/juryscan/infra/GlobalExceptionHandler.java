@@ -5,6 +5,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import unicap.juryscan.exception.RecaptchaException;
 import unicap.juryscan.exception.ResourceNotFoundException;
 
 @RestControllerAdvice
@@ -33,5 +34,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseError> handleResourceNotFoundException(ResourceNotFoundException e){
         ApiResponseError responseError = new ApiResponseError(404, e);
         return ResponseEntity.status(404).body(responseError);
+    }
+
+    @ExceptionHandler(RecaptchaException.class)
+    public ResponseEntity<ApiResponseError> handleRecaptchaException(RecaptchaException e){
+        ApiResponseError responseError = new ApiResponseError(403, e);
+        return ResponseEntity.status(403).body(responseError);
     }
 }

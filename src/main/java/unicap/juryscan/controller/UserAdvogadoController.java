@@ -8,6 +8,7 @@ import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoRegisteredDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
+import unicap.juryscan.service.reCaptcha.RecaptchaService;
 import unicap.juryscan.service.userAdvogado.UserAdvogadoService;
 import unicap.juryscan.infra.ApiResponse;
 
@@ -18,9 +19,11 @@ import java.util.UUID;
 public class UserAdvogadoController {
 
     private final UserAdvogadoService userAdvogadoService;
+    private final RecaptchaService recaptchaService;
 
-    public UserAdvogadoController(UserAdvogadoService userAdvogadoService) {
+    public UserAdvogadoController(UserAdvogadoService userAdvogadoService,  RecaptchaService recaptchaService) {
         this.userAdvogadoService = userAdvogadoService;
+        this.recaptchaService = recaptchaService;
     }
 
     @GetMapping("/")
@@ -46,6 +49,9 @@ public class UserAdvogadoController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUserAdvogado(@RequestBody UserAdvogadoCreateDTO userRequest){
+        // valida primeiro no captcha
+        recaptchaService.isValid(userRequest.getRecaptchaToken());
+
         UserAdvogadoRegisteredDTO createdUser = userAdvogadoService.createUserAdvogado(userRequest);
         ApiResponse response = new ApiResponse(true, "Usuário criado com sucesso", createdUser, 201);
         return ResponseEntity.status(201).body(response);

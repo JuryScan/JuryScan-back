@@ -17,4 +17,6 @@ public class UserComumCreateDTO {
     private String senha;
     private Date dataNascimento;
     private String cpf;
+
+    private String recaptchaToken;
 }

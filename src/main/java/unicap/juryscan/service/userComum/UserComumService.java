@@ -69,7 +69,11 @@ public class UserComumService implements IUserComumService {
         userMapped.setEmailVerificado(false);
         userRepository.save(userMapped);
 
-        LoginResponseDTO loginResponse = authenticationService.login(new AuthenticationDTO(userMapped.getEmail(), userCreateDTO.getSenha()));
+        AuthenticationDTO authDTO = AuthenticationDTO.builder()
+                .email(userMapped.getEmail())
+                .password(userCreateDTO.getSenha())
+                .build();
+        LoginResponseDTO loginResponse = authenticationService.login(authDTO);
 
         return new UserComumRegisteredDTO(loginResponse.getToken(), userComumMapper.toResponseDTO(userMapped));
     }

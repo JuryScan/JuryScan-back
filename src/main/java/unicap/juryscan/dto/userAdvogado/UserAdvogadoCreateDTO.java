@@ -20,4 +20,6 @@ public class UserAdvogadoCreateDTO {
     private String descricao;
     private String numeroOab;
     private String experiencia;
+
+    private String recaptchaToken;
 }

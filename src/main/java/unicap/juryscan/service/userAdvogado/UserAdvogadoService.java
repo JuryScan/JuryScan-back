@@ -52,7 +52,11 @@ public class UserAdvogadoService implements IUserAdvogadoService {
         userMapped.setEmailVerificado(false);
         userRepository.save(userMapped);
 
-        LoginResponseDTO loginResponse = authenticationService.login(new AuthenticationDTO(userMapped.getEmail(), userCreateDTO.getSenha()));
+        AuthenticationDTO authDTO = AuthenticationDTO.builder()
+                .email(userMapped.getEmail())
+                .password(userCreateDTO.getSenha())
+                .build();
+        LoginResponseDTO loginResponse = authenticationService.login(authDTO);
 
         return new UserAdvogadoRegisteredDTO(loginResponse.getToken(), userAdvogadoMapper.toResponseDTO(userMapped));
     }
