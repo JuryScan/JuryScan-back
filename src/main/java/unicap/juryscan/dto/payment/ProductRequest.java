@@ -12,5 +12,5 @@ public class ProductRequest {
     private Long amount;
     private Long quantity;
     private String name;
-    private String currency;
+    // Currency sempre será BRL para o nosso caso, então não é necessário incluir no request
 }

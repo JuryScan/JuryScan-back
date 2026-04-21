@@ -16,8 +16,11 @@ import unicap.juryscan.exception.ResourceNotFoundException;
 import unicap.juryscan.exception.UserAlreadyExistsException;
 import unicap.juryscan.mapper.UserAdvogadoMapper;
 import unicap.juryscan.model.User;
+import unicap.juryscan.model.Wallet;
 import unicap.juryscan.repository.UserRepository;
+import unicap.juryscan.repository.WalletRepository;
 import unicap.juryscan.service.auth.AuthenticationService;
+import unicap.juryscan.service.wallet.WalletService;
 
 import java.util.UUID;
 
@@ -26,15 +29,17 @@ public class UserAdvogadoService implements IUserAdvogadoService {
 
     private final UserRepository userRepository;
     private final UserAdvogadoMapper userAdvogadoMapper;
-    private final PasswordEncoder passwordEncoder;
+    private final WalletService walletService;
 
+    private final PasswordEncoder passwordEncoder;
     private final AuthenticationService authenticationService;
 
-    public UserAdvogadoService(UserRepository userRepository, UserAdvogadoMapper userAdvogadoMapper, PasswordEncoder passwordEncoder, AuthenticationService authenticationService) {
+    public UserAdvogadoService(UserRepository userRepository, UserAdvogadoMapper userAdvogadoMapper, PasswordEncoder passwordEncoder, AuthenticationService authenticationService, WalletService walletService) {
         this.userRepository = userRepository;
         this.userAdvogadoMapper = userAdvogadoMapper;
         this.passwordEncoder = passwordEncoder;
         this.authenticationService = authenticationService;
+        this.walletService = walletService;
     }
 
     @Override
@@ -50,7 +55,9 @@ public class UserAdvogadoService implements IUserAdvogadoService {
         userMapped.setTipoUsuario(TipoUserEnum.ADVOGADO);
         userMapped.setStatus(UserStatusEnum.ATIVO);
         userMapped.setEmailVerificado(false);
-        userRepository.save(userMapped);
+        User savedUser = userRepository.save(userMapped);
+        // Criar carteira automaticamente para o novo usuário
+        Wallet wallet = walletService.createWallet(savedUser);
 
         AuthenticationDTO authDTO = AuthenticationDTO.builder()
                 .email(userMapped.getEmail())

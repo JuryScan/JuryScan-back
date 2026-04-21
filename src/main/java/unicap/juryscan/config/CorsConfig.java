@@ -15,7 +15,8 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(List.of("https://localhost:3000"));
+        // origin temporária apenas para permitir que o ngrok faça requests
+        corsConfiguration.setAllowedOrigins(List.of("https://localhost:3000", "https://zetta-faunlike-kindheartedly.ngrok-free.dev"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
 
