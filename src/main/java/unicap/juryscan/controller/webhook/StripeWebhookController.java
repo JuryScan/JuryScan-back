@@ -1,5 +1,7 @@
 package unicap.juryscan.controller.webhook;
 
+import com.stripe.exception.SignatureVerificationException;
+import com.stripe.model.Event;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicap.juryscan.service.webhook.StripeWebhookService;
@@ -14,12 +16,15 @@ public class StripeWebhookController {
         this.stripeWebhookService = stripeWebhookService;
     }
 
-    //TODO implementar handler
-    @PostMapping("/")
+    @PostMapping("/checkout-success")
     public ResponseEntity<String> handleStripeEvent(
             @RequestBody String payload,
-            @RequestHeader("Stripe-Signature") String sigHeader){
+            @RequestHeader("Stripe-Signature") String sigHeader) throws SignatureVerificationException {
 
-        return ResponseEntity.ok().build();
+        Event event = stripeWebhookService.constructEvent(payload, sigHeader);
+        // Processar eventos específicos, por exemplo, checkout.session.completed
+        stripeWebhookService.handleCheckoutSessionCompleted(event);
+
+        return ResponseEntity.ok("Webhook processado com sucesso");
     }
 }

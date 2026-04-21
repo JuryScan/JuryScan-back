@@ -59,7 +59,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
 
-                        .requestMatchers(HttpMethod.POST, "api/v1/product-checkout/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/product-checkout/**").hasAnyRole("COMUM", "ADVOGADO", "ADMIN")
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/webhook/**").permitAll()
 

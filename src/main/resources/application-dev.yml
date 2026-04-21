@@ -44,5 +44,8 @@ google:
   recaptcha:
     secret: ${GOOGLE_RECAPTCHA_SECRET_KEY}
 
-stripe.api:
+stripe:
+  secret:
     key: ${STRIPE_SECRET_KEY}
+  webhook:
+    secret: ${STRIPE_WEBHOOK_SECRET}
