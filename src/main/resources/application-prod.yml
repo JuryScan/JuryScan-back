@@ -6,11 +6,11 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create # Only validate the db schema
+      ddl-auto: validate # Only validate the db schema
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
   flyway:
     enabled: true
+    default-schema: public
     locations: classpath:db/migration
 
 server:
@@ -19,6 +19,7 @@ server:
     whitelabel:
       enabled: false
 
+# Configurações personalizadas da aplicação
 api:
   uri: /api/v1
   data-load:
@@ -28,8 +29,29 @@ api:
     token:
       secret: ${JWT_SECRET}
 
+# Configurações do Google
+google:
+  gemini:
+    api:
+      key: ${GEMINI_API_KEY}
+    model: gemini-2.5-flash
+  recaptcha:
+    secret: ${GOOGLE_RECAPTCHA_SECRET_KEY}
+
+# Configurações do Stripe
 stripe:
   secret:
     key: ${STRIPE_SECRET_KEY}
   webhook:
     secret: ${STRIPE_WEBHOOK_SECRET}
+
+# Actuator para health checks
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      # Detalhes apenas para usuários autorizados
+      show-details: when-authorized
