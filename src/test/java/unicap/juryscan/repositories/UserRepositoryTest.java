@@ -32,7 +32,7 @@ public class UserRepositoryTest {
     @Test
     @DisplayName("Deve retornar um usuário do tipo comum armazenado no banco de dados")
     void findByTipoUsuarioandIdCase1(){
-        UserComumCreateDTO userComumCreateDTO = new UserComumCreateDTO("Carlos Pinheiro", "carlos@gmail.com", "81992448333", "123", new Date(28, 05, 2005), "11997494422");
+        UserComumCreateDTO userComumCreateDTO = new UserComumCreateDTO("Carlos Pinheiro", "carlos@gmail.com", "81992448333", "123", new Date(28, 05, 2005), "11997494422", null);
         User user = userComumMapper.toEntity(userComumCreateDTO);
         user.setTipoUsuario(TipoUserEnum.COMUM);
         User createdUser = userRepository.save(user);

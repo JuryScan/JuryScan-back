@@ -52,26 +52,26 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/advogado/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "api/v1/auth/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/me").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/comum/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "api/v1/users/advogado/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "api/v1/analyses/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "api/v1/failures/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/advogado/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/analyses/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/failures/**").authenticated()
 
-                        .requestMatchers(HttpMethod.PUT, "api/v1/users/comum/**").hasAnyRole("COMUM", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "api/v1/users/comum/**").hasAnyRole("COMUM", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/comum/**").hasAnyRole("COMUM", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/comum/**").hasAnyRole("COMUM", "ADMIN")
 
-                        .requestMatchers(HttpMethod.PUT, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
 
-                        .requestMatchers(HttpMethod.POST, "api/v1/product-checkout/**").hasAnyRole("COMUM", "ADVOGADO", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/product-checkout/**").hasAnyRole("COMUM", "ADVOGADO", "ADMIN")
 
                         // Validar padrão de segurança em webhook
                         .requestMatchers(HttpMethod.POST, "/api/v1/webhook/**").permitAll()
 
                         .requestMatchers("api/v1/addresses/**").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "api/v1/analyses/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/analyses/**").authenticated()
 
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
