@@ -38,10 +38,15 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        // Swagger endpoints
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
+
+                        // Actuator endpoints
+                        .requestMatchers("/actuator/health/**").permitAll()
+                        .requestMatchers("/actuator/info").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/comum/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/advogado/register").permitAll()
@@ -59,8 +64,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "api/v1/users/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
 
-                        .requestMatchers(HttpMethod.POST, "api/v1/product-checkout/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/v1/product-checkout/**").hasAnyRole("COMUM", "ADVOGADO", "ADMIN")
 
+                        // Validar padrão de segurança em webhook
                         .requestMatchers(HttpMethod.POST, "/api/v1/webhook/**").permitAll()
 
                         .requestMatchers("api/v1/addresses/**").authenticated()
