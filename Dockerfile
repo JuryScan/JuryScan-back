@@ -15,8 +15,8 @@ RUN mvn dependency:go-offline -B
 # Copiar código fonte
 COPY src ./src
 
-# Build da aplicação (pular testes para build mais rápido)
-RUN mvn clean package -DskipTests -B
+# Build da aplicação (pular compilação e execução de testes)
+RUN mvn clean package -Dmaven.test.skip=true -B
 
 # Stage 2: Runtime
 FROM eclipse-temurin:21-jre-alpine
