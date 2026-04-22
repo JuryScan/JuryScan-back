@@ -11,10 +11,10 @@ spring:
       hibernate:
         format_sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
   flyway:
     enabled: true
     default-schema: public
+    locations: classpath:db/migration
 
 server:
   port: ${SERVER_PORT:8080}
@@ -27,6 +27,7 @@ logging:
     org.hibernate: DEBUG
     org.springframework.security: DEBUG
 
+# Configurações personalizadas da aplicação
 api:
   uri: /api/v1
   data-load:
@@ -36,6 +37,7 @@ api:
     token:
       secret: ${JWT_SECRET}
 
+# Configurações do Google
 google:
   gemini:
     api:
@@ -44,8 +46,19 @@ google:
   recaptcha:
     secret: ${GOOGLE_RECAPTCHA_SECRET_KEY}
 
+# Configurações do Stripe
 stripe:
   secret:
     key: ${STRIPE_SECRET_KEY}
   webhook:
     secret: ${STRIPE_WEBHOOK_SECRET}
+
+# Actuator para monitoramento e debug (Desenvolvimento)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,beans,mappings
+  endpoint:
+    health:
+      show-details: always

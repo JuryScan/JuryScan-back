@@ -1,0 +1,95 @@
+# Diretórios de Build
+target/
+build/
+out/
+bin/
+*.class
+
+# IDEs
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+# Eclipse
+.project
+.classpath
+.settings/
+.metadata
+.recommenders/
+# VS Code
+.vscode/
+*.code-workspace
+# NetBeans
+nbproject/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# Sistema de Controle de Versão
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# Variáveis de Ambiente e Configurações Sensíveis
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+log/
+
+# Arquivos de Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# Documentação e README
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
+docs/
+*.md
+
+# Testes
+coverage/
+test-results/
+*.test
+*.spec
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+azure-pipelines.yml
+
+# Arquivos Temporários Maven
+dependency-reduced-pom.xml
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Outros
+*.bak
+*.tmp
+*.temp
+*.pid
+*.seed
+*.pid.lock
+.cache
+
