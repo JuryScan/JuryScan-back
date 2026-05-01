@@ -7,11 +7,12 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate # Only validate the db schema
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
     enabled: true
     default-schema: public
     locations: classpath:db/migration
+  thymeleaf:
+    check-template-location: false
 
 server:
   port: ${SERVER_PORT:8080}
