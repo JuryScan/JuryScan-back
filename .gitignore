@@ -34,3 +34,4 @@ build/
 
 ### Others ###
 .env
+sonar-project.properties

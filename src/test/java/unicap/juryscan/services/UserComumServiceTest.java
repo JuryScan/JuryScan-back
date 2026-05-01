@@ -19,8 +19,10 @@ import unicap.juryscan.exception.UserAlreadyExistsException;
 import unicap.juryscan.mapper.UserComumMapper;
 import unicap.juryscan.model.User;
 import unicap.juryscan.repository.UserRepository;
+import unicap.juryscan.repository.WalletRepository;
 import unicap.juryscan.service.auth.AuthenticationService;
 import unicap.juryscan.service.userComum.UserComumService;
+import unicap.juryscan.service.wallet.WalletService;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +44,12 @@ class UserComumServiceTest {
 
     @Mock
     private AuthenticationService auth;
+
+    @Mock
+    private WalletRepository walletRepository;
+
+    @Mock
+    private WalletService walletService;
 
     @InjectMocks
     private UserComumService service;
@@ -72,9 +80,9 @@ class UserComumServiceTest {
         when(mapper.toEntity(dto)).thenReturn(user);
         when(encoder.encode("123")).thenReturn("abc");
         when(repo.save(user)).thenReturn(user);
+        when(walletRepository.save(any())).thenReturn(null); // Mock wallet creation
         when(mapper.toResponseDTO(user)).thenReturn(new UserComumResponseDTO());
         when(auth.login(any())).thenReturn(loginResponse);
-        when(mapper.toResponseDTO(user)).thenReturn(new UserComumResponseDTO());
 
         var res = service.createUserComum(dto);
         assertNotNull(res);
