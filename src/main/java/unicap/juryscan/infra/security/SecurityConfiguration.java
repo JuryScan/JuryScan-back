@@ -69,7 +69,7 @@ public class SecurityConfiguration {
                         // Validar padrão de segurança em webhook
                         .requestMatchers(HttpMethod.POST, "/api/v1/webhook/**").permitAll()
 
-                        .requestMatchers("api/v1/addresses/**").authenticated()
+                        .requestMatchers("/api/v1/addresses/**").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/analyses/**").authenticated()
 
