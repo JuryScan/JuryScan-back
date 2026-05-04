@@ -1,6 +1,7 @@
 package unicap.juryscan.infra;
 
 import com.stripe.exception.SignatureVerificationException;
+import com.stripe.exception.StripeException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -47,5 +48,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseError> handleSignatureVerificationException(SignatureVerificationException e){
         ApiResponseError responseError = new ApiResponseError(401, "Falha na verificação da assinatura do webhook. Requisição não autorizada.");
         return ResponseEntity.status(401).body(responseError);
+    }
+
+    @ExceptionHandler(StripeException.class)
+    public ResponseEntity<ApiResponseError> handleStripeException(StripeException e){
+        ApiResponseError responseError = new ApiResponseError(502, "Erro ao processar pagamento: " + e.getMessage());
+        return ResponseEntity.status(502).body(responseError);
     }
 }
