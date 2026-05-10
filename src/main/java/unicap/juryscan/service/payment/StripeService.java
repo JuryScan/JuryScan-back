@@ -32,6 +32,7 @@ public class StripeService implements IStripeService{
                 .setPriceData(priceData)
                 .build();
 
+        //TODO successUrl e cancelUrl vão ser páginas mapeadas pelo frontend, incluir posteriormente
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl("http://localhost:" + serverPort + "/redirect/payment/success")
