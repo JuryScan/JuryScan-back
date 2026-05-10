@@ -3,6 +3,7 @@ package unicap.juryscan.service.payment;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import unicap.juryscan.dto.payment.ProductRequest;
 import unicap.juryscan.dto.payment.StripeResponse;
@@ -12,7 +13,10 @@ import java.util.UUID;
 @Service
 public class StripeService implements IStripeService{
 
-    public StripeResponse checkoutProducts(ProductRequest productRequest, UUID userId){
+    @Value("${server.port}")
+    private String serverPort;
+
+    public StripeResponse checkoutProducts(ProductRequest productRequest, UUID userId) throws StripeException {
         SessionCreateParams.LineItem.PriceData.ProductData productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
                 .setName(productRequest.getName())
                 .build();
@@ -28,24 +32,19 @@ public class StripeService implements IStripeService{
                 .setPriceData(priceData)
                 .build();
 
+        //TODO successUrl e cancelUrl vão ser páginas mapeadas pelo frontend, incluir posteriormente
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:3000/static/success")
-                .setCancelUrl("http://localhost:3000/static/cancel")
+                .setSuccessUrl("http://localhost:" + serverPort + "/redirect/payment/success")
+                .setCancelUrl("http://localhost:3000/payment_cancel.html")
                 .setClientReferenceId(userId.toString())
                 .addLineItem(lineItem)
                 .build();
 
-        Session session = null;
-        //TODO adicionar global exception handler
-        try {
-            session = Session.create(params);
-        } catch(StripeException e){
-            System.out.println(e.getMessage());
-        }
+        Session session = Session.create(params);
 
         return StripeResponse.builder()
-                .status("SUCCESS") // hardcoded
+                .status("SUCCESS")
                 .message("payment successful")
                 .sessionId(session.getId())
                 .sessionUrl(session.getUrl())
