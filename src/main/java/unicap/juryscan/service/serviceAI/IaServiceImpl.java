@@ -13,6 +13,10 @@ public class IaServiceImpl implements IaService {
                 .uri("/predict")
                 .bodyValue(request)
                 .retrieve()
+                .onStatus(HttpStatusCode::isError, clientResponse ->
+                    clientResponse.bodyToMono(String.class)
+                        .map(body -> new RuntimeException("Erro na chamada IA: " + body))
+                )
                 .bodyToMono(IAResponseDTO.class)
                 .block();
     }
