@@ -11,7 +11,8 @@ import java.util.List;
 @ToString
 @Builder
 public class AIResponseDTO {
-    private String titulo;
-    private String descricaoGeral;
-    private List<FailureCreateDTO> failures;
+    private String status;
+    private String message;
+    private Object result; // alterar para classe quando definir result
 }
+

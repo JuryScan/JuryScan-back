@@ -9,8 +9,5 @@ import lombok.*;
 @Builder
 
 public class AIRequestDTO {
-    @NotBlank
-    private String titulo;
-    @NotBlank
-    private String descricaoGeral;
+    private byte[] base64;
 }

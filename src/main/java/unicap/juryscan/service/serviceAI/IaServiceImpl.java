@@ -1,3 +1,9 @@
+package unicap.juryscan.serviceAI;
+
+import unicap.juryscan.dto.ai.AIRequestDTO;
+import unicap.juryscan.dto.ai.AIResponseDTO;
+import juryscan.unicap.config.WebClientConfig;
+
 @Service
 public class IaServiceImpl implements IaService {
 
