@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
@@ -13,6 +14,8 @@ import unicap.juryscan.service.userComum.UserComumService;
 
 import java.sql.Date;
 import java.time.LocalDate;
+
+@Profile("!test")
 
 @Component
 public class DataInitializer implements CommandLineRunner {
