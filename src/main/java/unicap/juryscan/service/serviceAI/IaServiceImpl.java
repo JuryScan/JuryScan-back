@@ -10,7 +10,7 @@ public class IaServiceImpl implements IaService {
     @Override
     public IAResponseDTO processInput(IARequestDTO request) {
         return webClient.post()
-                .uri("/predict")
+                .uri("/analyze")
                 .bodyValue(request)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, clientResponse ->
