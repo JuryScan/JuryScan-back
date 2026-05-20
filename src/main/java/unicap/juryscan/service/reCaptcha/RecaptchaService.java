@@ -14,8 +14,14 @@ public class RecaptchaService implements IRecaptchaService {
 
     private static final String GOOGLE_RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";
 
+    private final RestTemplate restTemplate;
+
+    public RecaptchaService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     public void isValid(String token){
-        RestTemplate restTemplate = new RestTemplate();
+
         String url = String.format(GOOGLE_RECAPTCHA_VERIFY_URL, secretKey, token);
 
         RecaptchaResponse response = restTemplate.postForObject(url, null, RecaptchaResponse.class);

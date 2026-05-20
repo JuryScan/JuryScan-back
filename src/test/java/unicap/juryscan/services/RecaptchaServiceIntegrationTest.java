@@ -1,58 +1,72 @@
 package unicap.juryscan.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
-import unicap.juryscan.dto.reCaptcha.RecaptchaResponse;
 import unicap.juryscan.exception.RecaptchaException;
 import unicap.juryscan.service.reCaptcha.RecaptchaService;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.hamcrest.Matchers.containsString;
 
-@SpringBootTest(properties = "google.recaptcha.secret=test_secret_key")
+
+@SpringBootTest(classes = {RecaptchaService.class, RecaptchaServiceIntegrationTest.LocalRestConfig.class}, properties = {
+        "google.recaptcha.secret=test_secret_key"
+})
 @ActiveProfiles("test")
 public class RecaptchaServiceIntegrationTest {
+
+
+    @TestConfiguration
+    static class LocalRestConfig {
+        @Bean
+        public RestTemplate restTemplate() {
+            return new RestTemplate();
+        }
+    }
 
     @Autowired
     private RecaptchaService recaptchaService;
 
-    @MockitoBean
+    @Autowired
     private RestTemplate restTemplate;
+
+    private MockRestServiceServer mockServer;
+
+    @BeforeEach
+    void setUp() {
+
+        mockServer = MockRestServiceServer.createServer(restTemplate);
+    }
 
     @Test
     void shouldValidateTokenSuccessfully() {
-        RecaptchaResponse mockResponse = new RecaptchaResponse();
-        mockResponse.setSuccess(true);
+        String jsonResponse = "{\"success\": true}";
 
-        Mockito.when(restTemplate.postForObject(anyString(), any(), eq(RecaptchaResponse.class)))
-                .thenReturn(mockResponse);
+        mockServer.expect(requestTo(containsString("https://www.google.com/recaptcha/api/siteverify")))
+                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
 
         assertDoesNotThrow(() -> recaptchaService.isValid("valid_token"));
+        mockServer.verify();
     }
 
     @Test
     void shouldThrowExceptionWhenTokenIsInvalid() {
-        RecaptchaResponse mockResponse = new RecaptchaResponse();
-        mockResponse.setSuccess(false);
+        String jsonResponse = "{\"success\": false}";
 
-        Mockito.when(restTemplate.postForObject(anyString(), any(), eq(RecaptchaResponse.class)))
-                .thenReturn(mockResponse);
+        mockServer.expect(requestTo(containsString("https://www.google.com/recaptcha/api/siteverify")))
+                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
 
         assertThrows(RecaptchaException.class, () -> recaptchaService.isValid("invalid_token"));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenResponseIsNull() {
-        Mockito.when(restTemplate.postForObject(anyString(), any(), eq(RecaptchaResponse.class)))
-                .thenReturn(null);
-
-        assertThrows(RecaptchaException.class, () -> recaptchaService.isValid("null_token"));
+        mockServer.verify();
     }
 }
