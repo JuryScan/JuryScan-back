@@ -6,8 +6,12 @@ import com.stripe.model.checkout.Session;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
@@ -21,16 +25,17 @@ import unicap.juryscan.model.Wallet;
 import unicap.juryscan.repository.UserRepository;
 import unicap.juryscan.repository.TransactionRepository;
 import unicap.juryscan.service.wallet.WalletService;
-
-
-
 import unicap.juryscan.service.webhook.StripeWebhookService;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(classes = { StripeWebhookService.class, WalletService.class })
+@EnableAutoConfiguration
+@EnableJpaRepositories(basePackages = "unicap.juryscan.repository")
+@EntityScan(basePackages = "unicap.juryscan.model")
 @ActiveProfiles("test")
 @Transactional
+
 public class StripeWebhookServiceIntegrationTest {
 
     @Autowired
