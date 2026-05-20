@@ -2,9 +2,12 @@ package unicap.juryscan.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +26,10 @@ import unicap.juryscan.service.transaction.TransactionService;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(classes = { TransactionService.class })
+@EnableAutoConfiguration
+@EnableJpaRepositories(basePackages = "unicap.juryscan.repository")
+@EntityScan(basePackages = "unicap.juryscan.model")
 @ActiveProfiles("test")
 @Transactional
 public class TransactionServiceIntegrationTest {
