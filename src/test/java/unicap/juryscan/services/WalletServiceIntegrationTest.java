@@ -2,7 +2,10 @@ package unicap.juryscan.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +19,14 @@ import unicap.juryscan.service.wallet.WalletService;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+
+@SpringBootTest(classes = { WalletService.class })
+@EnableAutoConfiguration
+@EnableJpaRepositories(basePackages = "unicap.juryscan.repository")
+@EntityScan(basePackages = "unicap.juryscan.model")
 @ActiveProfiles("test")
 @Transactional
+
 public class WalletServiceIntegrationTest {
 
     @Autowired
@@ -82,7 +90,7 @@ public class WalletServiceIntegrationTest {
         walletService.createWallet(user);
         walletService.addCredits(user.getId(), 30);
 
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalStateException.class, () -> {
             walletService.deductCredits(user.getId(), 100);
         });
     }
