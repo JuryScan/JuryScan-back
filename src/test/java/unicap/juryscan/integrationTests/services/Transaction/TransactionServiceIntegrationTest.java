@@ -1,4 +1,4 @@
-package unicap.juryscan.services;
+package unicap.juryscan.integrationTests.services.Transaction;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.util.UUID;
 
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.enums.TipoUserEnum;

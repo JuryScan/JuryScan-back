@@ -1,4 +1,4 @@
-package unicap.juryscan.models;
+package unicap.juryscan.unitTests.mapper.models.Address;
 
 import org.junit.jupiter.api.Test;
 import unicap.juryscan.enums.TipoEnderecoEnum;

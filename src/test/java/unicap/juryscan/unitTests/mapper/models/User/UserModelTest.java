@@ -1,4 +1,4 @@
-package unicap.juryscan.models;
+package unicap.juryscan.unitTests.mapper.models.User;
 
 import org.junit.jupiter.api.Test;
 import unicap.juryscan.enums.TipoUserEnum;

@@ -1,4 +1,4 @@
-package unicap.juryscan.services;
+package unicap.juryscan.unitTests.mapper.services.UserComum;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,9 +18,11 @@ import unicap.juryscan.exception.ResourceNotFoundException;
 import unicap.juryscan.exception.UserAlreadyExistsException;
 import unicap.juryscan.mapper.UserComumMapper;
 import unicap.juryscan.model.User;
+import unicap.juryscan.model.Wallet;
 import unicap.juryscan.repository.UserRepository;
 import unicap.juryscan.service.auth.AuthenticationService;
 import unicap.juryscan.service.userComum.UserComumService;
+import unicap.juryscan.service.wallet.WalletService;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +45,9 @@ class UserComumServiceTest {
     @Mock
     private AuthenticationService auth;
 
+    @Mock
+    private WalletService walletService;
+
     @InjectMocks
     private UserComumService service;
 
@@ -53,16 +58,16 @@ class UserComumServiceTest {
         MockitoAnnotations.openMocks(this);
         user = new User();
         user.setId(UUID.randomUUID());
-        user.setEmail("teste@email.com");
+        user.setEmail("test@email.com");
         user.setSenha("123");
         user.setTipoUsuario(TipoUserEnum.COMUM);
         user.setStatus(UserStatusEnum.ATIVO);
     }
 
     @Test
-    void criar_ok() {
+    void create_ok() {
         UserComumCreateDTO dto = new UserComumCreateDTO();
-        dto.setEmail("novo@teste.com");
+        dto.setEmail("new@test.com");
         dto.setSenha("123");
 
         LoginResponseDTO loginResponse = new LoginResponseDTO();
@@ -72,18 +77,19 @@ class UserComumServiceTest {
         when(mapper.toEntity(dto)).thenReturn(user);
         when(encoder.encode("123")).thenReturn("abc");
         when(repo.save(user)).thenReturn(user);
-        when(mapper.toResponseDTO(user)).thenReturn(new UserComumResponseDTO());
+        when(walletService.createWallet(any(User.class))).thenReturn(new Wallet());
         when(auth.login(any())).thenReturn(loginResponse);
         when(mapper.toResponseDTO(user)).thenReturn(new UserComumResponseDTO());
 
         var res = service.createUserComum(dto);
         assertNotNull(res);
+        assertEquals("mock-jwt-token", res.getToken());
     }
 
     @Test
-    void criar_emailExistente() {
+    void create_existingEmail() {
         UserComumCreateDTO dto = new UserComumCreateDTO();
-        dto.setEmail("teste@email.com");
+        dto.setEmail("test@email.com");
 
         when(repo.findByEmailIgnoreCase(dto.getEmail())).thenReturn(user);
 
@@ -91,7 +97,7 @@ class UserComumServiceTest {
     }
 
     @Test
-    void buscarPorId_ok() {
+    void findById_ok() {
         when(repo.findByTipoUsuarioAndId(any(), any())).thenReturn(Optional.of(user));
         when(mapper.toResponseDTO(user)).thenReturn(new UserComumResponseDTO());
 
@@ -100,7 +106,7 @@ class UserComumServiceTest {
     }
 
     @Test
-    void buscarPorId_notFound() {
+    void findById_notFound() {
         when(repo.findByTipoUsuarioAndId(any(), any())).thenReturn(Optional.empty());
         assertThrows(ResourceNotFoundException.class, () -> service.getUserComumById(UUID.randomUUID()));
     }
@@ -109,14 +115,15 @@ class UserComumServiceTest {
     void softDelete_ok() {
         when(repo.findByTipoUsuarioAndId(any(), any())).thenReturn(Optional.of(user));
         service.softDeleteUserComum(user.getId());
+
         assertEquals(UserStatusEnum.INATIVO, user.getStatus());
+        verify(repo, times(1)).save(user);
     }
 
     @Test
-    void listar_ok() {
+    void list_ok() {
         var pageable = PageRequest.of(0, 5);
-        when(repo.findAllByTipoUsuario(any(), any()))
-                .thenReturn(new PageImpl<>(List.of(user)));
+        when(repo.findAllByTipoUsuario(any(), any())).thenReturn(new PageImpl<>(List.of(user)));
         when(mapper.toResponseDTO(any())).thenReturn(new UserComumResponseDTO());
 
         PageResponse<UserComumResponseDTO> res = service.getAllUserComums(pageable);

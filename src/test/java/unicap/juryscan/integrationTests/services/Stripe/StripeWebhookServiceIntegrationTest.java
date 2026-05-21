@@ -1,4 +1,4 @@
-package unicap.juryscan.services;
+package unicap.juryscan.integrationTests.services.Stripe;
 
 import com.stripe.model.Event;
 import com.stripe.model.EventDataObjectDeserializer;
@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

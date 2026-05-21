@@ -1,4 +1,4 @@
-package unicap.juryscan.services;
+package unicap.juryscan.integrationTests.services.Stripe;
 
 import com.stripe.model.checkout.Session;
 import org.junit.jupiter.api.AfterEach;
