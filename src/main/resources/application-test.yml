@@ -9,6 +9,17 @@ spring:
   flyway:
     enabled: false
 
+# Configurações personalizadas para testes
+api:
+  uri: /api/v1
+  integration:
+    services:
+      ai-analyzer:
+        url: http://localhost:8080
+        api-key: test-api-key
+  pricing:
+    analysis-cost: ${ANALYSIS_COST:1}
+
 # Actuator para testes
 management:
   endpoints:

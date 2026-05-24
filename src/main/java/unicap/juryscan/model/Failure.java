@@ -20,6 +20,7 @@ public class Failure {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(length = 2000)
     private String titulo;
 
     @Enumerated(EnumType.STRING)

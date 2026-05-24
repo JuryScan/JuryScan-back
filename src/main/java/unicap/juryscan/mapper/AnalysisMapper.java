@@ -1,7 +1,7 @@
 package unicap.juryscan.mapper;
 
 import org.springframework.stereotype.Component;
-import unicap.juryscan.dto.ai.AIResponseDTO;
+import unicap.juryscan.dto.integrationAi.AIResponseDTO;
 import unicap.juryscan.dto.analysis.AnalysisCreateDTO;
 import unicap.juryscan.dto.analysis.AnalysisResponseDTO;
 import unicap.juryscan.model.Analysis;
@@ -18,17 +18,26 @@ public class AnalysisMapper {
 
     public Analysis toEntity(AIResponseDTO dto) {
         Analysis analysis = new Analysis();
-        analysis.setTitulo(dto.getTitulo());
-        analysis.setDescricaoGeral(dto.getDescricaoGeral());
-        analysis.setFalhas(dto
-                .getFailures()
-                .stream()
-                .map(f -> {
-                    Failure failure = failureMapper.toEntity(f);
-                    failure.setAnalise(analysis);
-                    return failure;
-                }).toList()
-        );
+
+        if (dto.getResult() != null) {
+            analysis.setTitulo(dto.getResult().getTitulo());
+            analysis.setDescricaoGeral(dto.getResult().getDescricaoGeral());
+            analysis.setRelatorioSumarioJuridico(dto.getResult().getRelatorio_sumario_juridico());
+            analysis.setSumario(dto.getResult().getSumario());
+
+            if (dto.getResult().getFailures() != null && !dto.getResult().getFailures().isEmpty()) {
+                analysis.setFalhas(dto.getResult()
+                        .getFailures()
+                        .stream()
+                        .map(f -> {
+                            Failure failure = failureMapper.toEntity(f);
+                            failure.setAnalise(analysis);
+                            return failure;
+                        }).toList()
+                );
+            }
+        }
+
         return analysis;
     }
 
@@ -52,6 +61,8 @@ public class AnalysisMapper {
         AnalysisResponseDTO dto = new AnalysisResponseDTO();
         dto.setTitulo(entity.getTitulo());
         dto.setDescricaoGeral(entity.getDescricaoGeral());
+        dto.setRelatorioSumarioJuridico(entity.getRelatorioSumarioJuridico());
+        dto.setSumario(entity.getSumario());
         dto.setDataCriacao(entity.getDataCriacao());
         dto.setId(entity.getId());
         return dto;
