@@ -28,7 +28,7 @@ public class ExternalAIService implements IGenericAIService {
                 }
             });
 
-            return webClient.post()
+            AIResponseDTO response = webClient.post()
                     .uri("/api/v1/analyze")
                     .body(BodyInserters.fromMultipartData(body))
                     .retrieve()
@@ -37,11 +37,35 @@ public class ExternalAIService implements IGenericAIService {
                         throw new RuntimeException("Erro ao chamar serviço externo de IA: " + error.getMessage(), error);
                     })
                     .block();
+            validateAIResponse(response);
+
+            return response;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao analisar documento com serviço externo: " + e.getMessage(), e);
         }
     }
-}
 
+    private void validateAIResponse(AIResponseDTO response) {
+        if (response == null) {
+            throw new IllegalStateException("Resposta inválida da IA: nenhuma resposta recebida");
+        }
+
+        if (!"success".equalsIgnoreCase(response.getStatus())) {
+            throw new IllegalStateException("Erro na análise da IA: " + response.getMessage());
+        }
+
+        if (response.getResult() == null) {
+            throw new IllegalStateException("Resposta inválida da IA: dados de resultado ausentes");
+        }
+
+        if (response.getResult().getTitulo() == null || response.getResult().getTitulo().isEmpty()) {
+            throw new IllegalStateException("Resposta inválida da IA: título não fornecido");
+        }
+
+        if (response.getResult().getDescricaoGeral() == null || response.getResult().getDescricaoGeral().isEmpty()) {
+            throw new IllegalStateException("Resposta inválida da IA: descrição geral não fornecida");
+        }
+    }
+}
 
 

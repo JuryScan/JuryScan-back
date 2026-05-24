@@ -5,11 +5,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 import unicap.juryscan.dto.analysis.AnalysisResponseDTO;
 import unicap.juryscan.dto.pagination.PageResponse;
+import unicap.juryscan.model.User;
 import unicap.juryscan.service.analysis.IAnalysisService;
 import unicap.juryscan.service.serviceAI.IGenericAIService;
 import unicap.juryscan.infra.ApiResponse;
@@ -63,24 +65,21 @@ public class AnalysisController {
     }
 
     @PostMapping(
-            value = "/user/{userId}",
+            value = "/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     public ResponseEntity<ApiResponse> createAnalysis(
-            @PathVariable("userId") UUID userId,
-            @RequestParam("file") MultipartFile file){
-        try {
-            if (!file.getContentType().equals("application/pdf")){
-                ApiResponse response = new ApiResponse(false, "Tipo de arquivo inválido. Apenas PDFs são aceitos.", 400);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            }
-            byte[] documentBytes = file.getBytes();
-            AnalysisResponseDTO analysis = analysisService.createAnalysis(userId, documentBytes);
-            ApiResponse response = new ApiResponse(true, "Análise criada com sucesso", analysis, 201);
-            return ResponseEntity.status(201).body(response);
-        } catch (Exception e) {
-            ApiResponse response = new ApiResponse(false, "Erro ao processar documento: " + e.getMessage(), 500);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            @RequestParam("file") MultipartFile file,
+            @AuthenticationPrincipal User user) throws Exception {
+
+        if (!file.getContentType().equals("application/pdf")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Tipo de arquivo inválido. Apenas PDFs são aceitos.", 400));
         }
+
+        byte[] documentBytes = file.getBytes();
+        AnalysisResponseDTO analysis = analysisService.createAnalysis(user.getId(), documentBytes);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse(true, "Análise criada com sucesso", analysis, 201));
     }
 }
