@@ -16,7 +16,7 @@ import unicap.juryscan.repository.AnalysisRepository;
 import unicap.juryscan.repository.UserRepository;
 import unicap.juryscan.service.analysis.AnalysisService;
 import unicap.juryscan.service.serviceAI.IGenericAIService;
-import unicap.juryscan.dto.ai.AIResponseDTO;
+import unicap.juryscan.dto.integrationAi.AIResponseDTO;
 
 import java.util.Optional;
 import java.util.UUID;

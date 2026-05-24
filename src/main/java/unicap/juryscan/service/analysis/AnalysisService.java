@@ -1,9 +1,11 @@
 package unicap.juryscan.service.analysis;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import unicap.juryscan.dto.ai.AIResponseDTO;
+import org.springframework.transaction.annotation.Transactional;
+import unicap.juryscan.dto.integrationAi.AIResponseDTO;
 import unicap.juryscan.dto.analysis.AnalysisResponseDTO;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.exception.ResourceNotFoundException;
@@ -13,23 +15,30 @@ import unicap.juryscan.model.User;
 import unicap.juryscan.repository.AnalysisRepository;
 import unicap.juryscan.repository.UserRepository;
 import unicap.juryscan.service.serviceAI.IGenericAIService;
+import unicap.juryscan.service.wallet.IWalletService;
 
 import java.util.UUID;
-//TODO dependendo da interface frontend, retornar dados do usuário em certas consultas
+
 @Service
 public class AnalysisService implements IAnalysisService {
 
     private final UserRepository userRepository;
     private final AnalysisRepository analysisRepository;
     private final AnalysisMapper analysisMapper;
-
     private final IGenericAIService genericAIService;
+    private final IWalletService walletService;
 
-    public AnalysisService(AnalysisRepository analysisRepository, AnalysisMapper analysisMapper, UserRepository userRepository, IGenericAIService genericAIService) {
+    @Value("${api.pricing.analysis-cost}")
+    private Integer analysisCost;
+
+    public AnalysisService(AnalysisRepository analysisRepository, AnalysisMapper analysisMapper,
+                          UserRepository userRepository, IGenericAIService genericAIService,
+                          IWalletService walletService) {
         this.analysisRepository = analysisRepository;
         this.analysisMapper = analysisMapper;
         this.userRepository = userRepository;
         this.genericAIService = genericAIService;
+        this.walletService = walletService;
     }
 
     @Override
@@ -53,7 +62,6 @@ public class AnalysisService implements IAnalysisService {
                 .findAllByUsuarioId(userId, pageable)
                 .map(analysisMapper::toResponseDTO);
 
-        //TODO Implementação de mapper de Page para PageResponse
         PageResponse<AnalysisResponseDTO> pageResponse = new PageResponse<>();
         pageResponse.setTotalElements(page.getTotalElements());
         pageResponse.setTotalPages(page.getTotalPages());
@@ -65,15 +73,29 @@ public class AnalysisService implements IAnalysisService {
     }
 
     @Override
+    @Transactional
     public AnalysisResponseDTO createAnalysis(UUID userId, byte[] documentBytes) {
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+
+        // Validar saldo de créditos antes de processar
+        Integer currentBalance = walletService.getBalance(userId);
+        if (currentBalance < analysisCost) {
+            throw new IllegalStateException("Saldo insuficiente. Saldo atual: " + currentBalance +
+                    ", créditos necessários: " + analysisCost);
+        }
+
+        // Processar análise com a IA
         AIResponseDTO aiResponse = genericAIService.analyzeDocument(documentBytes);
 
+        // Mapear resposta da IA para entidade
         Analysis analysis = analysisMapper.toEntity(aiResponse);
         analysis.setUsuario(user);
         analysis = analysisRepository.save(analysis);
+
+        // Descontar créditos após análise bem-sucedida
+        walletService.deductCredits(userId, analysisCost);
 
         return analysisMapper.toResponseDTO(analysis);
     }

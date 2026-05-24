@@ -19,10 +19,17 @@ public class Analysis {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(length = 2000)
     private String titulo;
 
     @Column(name = "descricao_geral", columnDefinition = "TEXT")
     private String descricaoGeral;
+
+    @Column(name = "relatorio_sumario_juridico", columnDefinition = "TEXT")
+    private String relatorioSumarioJuridico;
+
+    @Column(columnDefinition = "TEXT")
+    private String sumario;
 
     @Column(name = "data_criacao")
     @CreationTimestamp

@@ -1,4 +1,4 @@
-package unicap.juryscan.dto.ai;
+package unicap.juryscan.dto.integrationAi;
 
 import lombok.*;
 
@@ -7,7 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-
 public class AIRequestDTO {
     private byte[] base64;
 }

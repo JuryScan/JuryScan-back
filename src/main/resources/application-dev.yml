@@ -14,6 +14,7 @@ spring:
     enabled: true
     default-schema: public
     locations: classpath:db/migration
+    validate-on-migrate: false
 
 server:
   port: ${SERVER_PORT:8080}
@@ -35,13 +36,16 @@ api:
   security:
     token:
       secret: ${JWT_SECRET}
+  integration:
+    services:
+      ai-analyzer:
+        url: ${AI_ANALYZER_URL:}
+        api-key: ${AI_ANALYZER_API_KEY:}
+  pricing:
+    analysis-cost: ${ANALYSIS_COST:1}
 
 # Configurações do Google
 google:
-  gemini:
-    api:
-      key: ${GEMINI_API_KEY}
-    model: gemini-2.5-flash
   recaptcha:
     secret: ${GOOGLE_RECAPTCHA_SECRET_KEY}
 
