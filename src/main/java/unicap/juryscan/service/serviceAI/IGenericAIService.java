@@ -1,6 +1,6 @@
 package unicap.juryscan.service.serviceAI;
 
-import unicap.juryscan.dto.ai.AIResponseDTO;
+import unicap.juryscan.dto.integrationAi.AIResponseDTO;
 
 public interface IGenericAIService {
 

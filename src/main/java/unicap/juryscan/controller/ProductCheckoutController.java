@@ -1,5 +1,6 @@
 package unicap.juryscan.controller;
 
+import com.stripe.exception.StripeException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ public class ProductCheckoutController {
     @PostMapping("/checkout")
     public ResponseEntity<ApiResponse> checkoutProducts(
             @RequestBody ProductRequest productRequest,
-            @AuthenticationPrincipal User user)
+            @AuthenticationPrincipal User user) throws StripeException
     {
         StripeResponse stripeResponse = stripeService.checkoutProducts(productRequest, user.getId());
         ApiResponse response = new ApiResponse(true, "Checkout realizado com sucesso", stripeResponse, 200);
