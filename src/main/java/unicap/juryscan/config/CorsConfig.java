@@ -16,8 +16,11 @@ public class CorsConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         // origin temporária apenas para permitir que o ngrok faça requests
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000", "https://zetta-faunlike-kindheartedly.ngrok-free.dev"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://zetta-faunlike-kindheartedly.ngrok-free.dev",
+                "https://jury-scan-front-end.vercel.app"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
