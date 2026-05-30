@@ -20,11 +20,12 @@ public class FailureMapper {
 
     public FailureResponseDTO toResponseDTO(Failure entity){
         FailureResponseDTO dto = new FailureResponseDTO();
-        dto.setConfianca(entity.getConfianca());
         dto.setId(entity.getId());
-        dto.setSeveridade(entity.getSeveridade());
-        dto.setSugestaoCorrecao(entity.getSugestaoCorrecao());
         dto.setTitulo(entity.getTitulo());
+        dto.setSeveridade(entity.getSeveridade());
+        dto.setDescricao(entity.getDescricao());
+        dto.setConfianca(entity.getConfianca());
+        dto.setSugestaoCorrecao(entity.getSugestaoCorrecao());
         return dto;
     }
 }

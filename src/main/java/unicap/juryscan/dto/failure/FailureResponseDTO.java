@@ -14,6 +14,7 @@ public class FailureResponseDTO {
     private UUID id;
     private String titulo;
     private SeveridadeFalhaEnum severidade;
+    private String descricao;
     private Float confianca;
     private String sugestaoCorrecao;
 }
