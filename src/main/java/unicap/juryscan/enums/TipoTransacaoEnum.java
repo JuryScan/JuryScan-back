@@ -1,5 +1,5 @@
 package unicap.juryscan.enums;
 
 public enum TipoTransacaoEnum {
-    COMPRA, CONSUMO
+    COMPRA, CONSUMO, AQUISICAO_LEAD
 }
