@@ -92,7 +92,9 @@ public class AnalysisService implements IAnalysisService {
         // Mapear resposta da IA para entidade
         Analysis analysis = analysisMapper.toEntity(aiResponse);
         analysis.setUsuario(user);
-        analysis = analysisRepository.save(analysis);
+
+        // saveAndFlush garante que @CreationTimestamp seja imediatamente populado
+        analysis = analysisRepository.saveAndFlush(analysis);
 
         // Descontar créditos após análise bem-sucedida
         walletService.deductCredits(userId, analysisCost);

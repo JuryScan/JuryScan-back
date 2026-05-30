@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import unicap.juryscan.exception.InsufficientCreditsException;
 import unicap.juryscan.exception.RecaptchaException;
 import unicap.juryscan.exception.ResourceNotFoundException;
 
@@ -54,5 +55,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseError> handleStripeException(StripeException e){
         ApiResponseError responseError = new ApiResponseError(502, "Erro ao processar pagamento: " + e.getMessage());
         return ResponseEntity.status(502).body(responseError);
+    }
+
+    @ExceptionHandler(InsufficientCreditsException.class)
+    public ResponseEntity<ApiResponseError> handleInsufficientCreditsException(InsufficientCreditsException e){
+        ApiResponseError responseError = new ApiResponseError(402, e.getMessage());
+        return ResponseEntity.status(402).body(responseError);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiResponseError> handleIllegalStateException(IllegalStateException e){
+        ApiResponseError responseError = new ApiResponseError(400, e.getMessage());
+        return ResponseEntity.status(400).body(responseError);
     }
 }

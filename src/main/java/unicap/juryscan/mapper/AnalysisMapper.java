@@ -59,12 +59,21 @@ public class AnalysisMapper {
 
     public AnalysisResponseDTO toResponseDTO(Analysis entity){
         AnalysisResponseDTO dto = new AnalysisResponseDTO();
+        dto.setId(entity.getId());
         dto.setTitulo(entity.getTitulo());
         dto.setDescricaoGeral(entity.getDescricaoGeral());
         dto.setRelatorioSumarioJuridico(entity.getRelatorioSumarioJuridico());
         dto.setSumario(entity.getSumario());
         dto.setDataCriacao(entity.getDataCriacao());
-        dto.setId(entity.getId());
+
+        // Mapear falhas se existirem
+        if (entity.getFalhas() != null && !entity.getFalhas().isEmpty()) {
+            dto.setFalhas(entity.getFalhas()
+                    .stream()
+                    .map(failureMapper::toResponseDTO)
+                    .toList());
+        }
+
         return dto;
     }
 }
