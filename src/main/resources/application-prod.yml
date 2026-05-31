@@ -13,7 +13,10 @@ spring:
     locations: classpath:db/migration
     validate-on-migrate: false
   thymeleaf:
-    check-template-location: false
+    cache: true
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
 
 server:
   port: ${SERVER_PORT:8080}
@@ -24,6 +27,7 @@ server:
 # Configurações personalizadas da aplicação
 api:
   uri: /api/v1
+  base-url: ${API_BASE_URL:https://juryscan-back-prod.onrender.com}
   data-load:
     create-default-users: ${CREATE_DEFAULT_USERS:false}
     create-dump-data: ${CREATE_DUMP_DATA:false}

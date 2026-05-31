@@ -4,6 +4,7 @@ import com.google.genai.types.Schema;
 
 import java.util.Map;
 
+@Deprecated
 public class GeminiRequestContent {
     public static String PROMPT =
         """
