@@ -38,6 +38,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+
+                        // Redirect pages (payment success)
+                        .requestMatchers("/redirect/**").permitAll()
+
                         // Swagger endpoints
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
@@ -48,6 +52,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/actuator/health/**").permitAll()
                         .requestMatchers("/actuator/info").permitAll()
 
+                        // Api client endpoints
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/comum/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/advogado/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
@@ -66,12 +71,12 @@ public class SecurityConfiguration {
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/product-checkout/**").hasAnyRole("COMUM", "ADVOGADO", "ADMIN")
 
-                        // Validar padrão de segurança em webhook
-                        .requestMatchers(HttpMethod.POST, "/api/v1/webhook/**").permitAll()
-
                         .requestMatchers("/api/v1/addresses/**").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/analyses/**").authenticated()
+
+                        // Validar padrão de segurança em webhook
+                        .requestMatchers(HttpMethod.POST, "/api/v1/webhook/**").permitAll()
 
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

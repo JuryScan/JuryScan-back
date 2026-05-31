@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Concluído - JuryScan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #723E50 0%, #625B71 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #FFFFFF;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(10, 31, 48, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #723E50 0%, #633B48 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.5s ease-out 0.2s both;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .success-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        h1 {
+            color: #0A1F30;
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .message {
+            color: #625B71;
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: #f8f6f7;
+            border-left: 4px solid #723E50;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            text-align: left;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            color: #625B71;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .info-box strong {
+            color: #0A1F30;
+        }
+
+        .session-id {
+            font-family: 'Courier New', monospace;
+            background: #e8e6e9;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        .close-message {
+            background: #f8f6f7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            color: #625B71;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e8e6e9;
+            color: #625B71;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+
+        <h1>Pagamento Concluído!</h1>
+        <p class="message" th:text="${message}">Seu pagamento foi processado com sucesso.</p>
+
+        <div class="info-box">
+            <p><strong>✓</strong> Seus créditos serão adicionados em instantes</p>
+            <p><strong>✓</strong> Você receberá um e-mail de confirmação</p>
+            <p><strong>✓</strong> O histórico está disponível na sua conta</p>
+        </div>
+
+        <div class="info-box" th:if="${sessionId}">
+            <p><strong>ID da Transação:</strong></p>
+            <p class="session-id" th:text="${sessionId}">session_id_aqui</p>
+        </div>
+
+        <div class="close-message">
+            ✓ Você já pode fechar esta página
+        </div>
+
+        <div class="footer">
+            <p>💳 Pagamento processado pelo Stripe</p>
+            <p>&copy; 2026 JuryScan - Todos os direitos reservados</p>
+        </div>
+    </div>
+</body>
+</html>
+
