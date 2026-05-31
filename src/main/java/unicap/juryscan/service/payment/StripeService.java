@@ -13,8 +13,8 @@ import java.util.UUID;
 @Service
 public class StripeService implements IStripeService{
 
-    @Value("${server.port}")
-    private String serverPort;
+    @Value("${api.base-url}")
+    private String apiBaseUrl;
 
     public StripeResponse checkoutProducts(ProductRequest productRequest, UUID userId) throws StripeException {
         SessionCreateParams.LineItem.PriceData.ProductData productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
@@ -35,8 +35,8 @@ public class StripeService implements IStripeService{
         //TODO successUrl e cancelUrl vão ser páginas mapeadas pelo frontend, incluir posteriormente
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:" + serverPort + "/redirect/payment/success")
-                .setCancelUrl("http://localhost:3000/payment_cancel.html")
+                .setSuccessUrl(apiBaseUrl + "/redirect/payment/success")
+                .setCancelUrl(apiBaseUrl + "/redirect/payment/cancel")
                 .setClientReferenceId(userId.toString())
                 .addLineItem(lineItem)
                 .build();

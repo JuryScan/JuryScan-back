@@ -15,6 +15,11 @@ spring:
     default-schema: public
     locations: classpath:db/migration
     validate-on-migrate: false
+  thymeleaf:
+    cache: false
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
 
 server:
   port: ${SERVER_PORT:8080}
@@ -30,6 +35,7 @@ logging:
 # Configurações personalizadas da aplicação
 api:
   uri: /api/v1
+  base-url: ${API_BASE_URL:http://localhost:8080}
   data-load:
     create-default-users: ${CREATE_DEFAULT_USERS:false}
     create-dump-data: ${CREATE_DUMP_DATA:false}
