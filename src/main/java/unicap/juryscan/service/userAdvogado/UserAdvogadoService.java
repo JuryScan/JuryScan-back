@@ -10,6 +10,7 @@ import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoRegisteredDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
+import unicap.juryscan.dto.userAdvogado.UserAdvogadoUpdateDTO;
 import unicap.juryscan.enums.TipoUserEnum;
 import unicap.juryscan.enums.UserStatusEnum;
 import unicap.juryscan.exception.ResourceNotFoundException;
@@ -106,5 +107,38 @@ public class UserAdvogadoService implements IUserAdvogadoService {
         if (user.getStatus() == UserStatusEnum.INATIVO) throw new IllegalStateException("Usuário já está inativo");
         user.setStatus(UserStatusEnum.INATIVO);
         userRepository.save(user);
+    }
+
+    @Override
+    public UserAdvogadoResponseDTO updateUserAdvogado(UUID id, UserAdvogadoUpdateDTO dto) {
+        User user = userRepository.findByTipoUsuarioAndId(TipoUserEnum.ADVOGADO, id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        if (dto.getNomeCompleto() != null) user.setNomeCompleto(dto.getNomeCompleto());
+        if (dto.getTelefone() != null) user.setTelefone(dto.getTelefone());
+        if (dto.getDescricao() != null) user.setDescricao(dto.getDescricao());
+        if (dto.getExperiencia() != null) user.setExperiencia(dto.getExperiencia());
+        if (dto.getNumeroOab() != null) user.setNumeroOab(dto.getNumeroOab());
+        User saved = userRepository.save(user);
+        return userAdvogadoMapper.toResponseDTO(saved);
+    }
+
+    @Override
+    public PageResponse<UserAdvogadoResponseDTO> searchAdvogados(String busca, String cidade, String estado, Pageable pageable) {
+        String b = (busca != null && !busca.isBlank()) ? busca : null;
+        String c = (cidade != null && !cidade.isBlank()) ? cidade : null;
+        String e = (estado != null && !estado.isBlank()) ? estado : null;
+
+        Page<UserAdvogadoResponseDTO> page = userRepository
+                .searchAdvogados(TipoUserEnum.ADVOGADO, b, c, e, pageable)
+                .map(userAdvogadoMapper::toResponseDTO);
+
+        PageResponse<UserAdvogadoResponseDTO> pageResponse = new PageResponse<>();
+        pageResponse.setTotalElements(page.getTotalElements());
+        pageResponse.setTotalPages(page.getTotalPages());
+        pageResponse.setPage(page.getNumber());
+        pageResponse.setItems(page.getContent());
+        pageResponse.setPageSize(page.getSize());
+
+        return pageResponse;
     }
 }
