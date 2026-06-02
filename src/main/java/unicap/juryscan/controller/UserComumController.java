@@ -8,6 +8,7 @@ import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
 import unicap.juryscan.dto.userComum.UserComumRegisteredDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
+import unicap.juryscan.dto.userComum.UserComumUpdateDTO;
 
 import unicap.juryscan.service.reCaptcha.RecaptchaService;
 import unicap.juryscan.service.userComum.UserComumService;
@@ -69,6 +70,13 @@ public class UserComumController {
     public ResponseEntity<ApiResponse> softDeleteUser(@PathVariable UUID userId){
         userComumService.softDeleteUserComum(userId);
         ApiResponse response = new ApiResponse(true, "Usuário desativado com sucesso", 200);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateUserComum(@PathVariable UUID id, @RequestBody UserComumUpdateDTO request){
+        UserComumResponseDTO updated = userComumService.updateUserComum(id, request);
+        ApiResponse response = new ApiResponse(true, "Usuário atualizado com sucesso", updated, 200);
         return ResponseEntity.status(200).body(response);
     }
 }
