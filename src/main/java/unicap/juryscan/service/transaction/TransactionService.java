@@ -5,9 +5,11 @@ import org.springframework.data.domain.Pageable;
 import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.model.Transaction;
 import unicap.juryscan.repository.TransactionRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 public class TransactionService implements ITransactionService{
 
     private final TransactionRepository transactionRepository;
