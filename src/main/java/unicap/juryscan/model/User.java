@@ -72,6 +72,14 @@ public class User implements UserDetails {
     private String numeroOab;
     private String experiencia;
 
+    // foto de perfil (armazenada no banco; servida via GET /users/avatar/{id})
+    @Column(name = "foto_perfil")
+    private byte[] fotoPerfil;
+    @Column(name = "foto_content_type")
+    private String fotoContentType;
+    @Column(name = "foto_url")
+    private String fotoUrl;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_endereco")
     private Address endereco;

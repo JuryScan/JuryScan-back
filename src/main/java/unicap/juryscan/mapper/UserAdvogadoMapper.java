@@ -26,6 +26,7 @@ public class UserAdvogadoMapper {
                 .ofNullable(entity.getEndereco())
                 .map(endereco -> "/addresses/"+entity.getId())
                 .orElse(null));
+        dto.setFotoUrl(entity.getFotoUrl());
         dto.setDataCriacao(entity.getDataCriacao());
         dto.setDataUltimaAtualizacao(entity.getDataUltimaAtualizacao());
 

@@ -19,6 +19,7 @@ public class UserMapper {
             .status(user.getStatus())
             .emailVerificado(user.getEmailVerificado())
             .enderecoUrl(user.getEndereco() != null ? "/addresses/" + user.getEndereco().getId() : null)
+            .fotoUrl(user.getFotoUrl())
             .tipoUsuario(user.getTipoUsuario())
             .descricao(user.getDescricao())
             .numeroOab(user.getNumeroOab())

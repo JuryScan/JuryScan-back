@@ -23,6 +23,7 @@ public class UserComumResponseDTO {
     private UserStatusEnum status;
     // Não é estritamente o padrão HATEOAS
     private String enderecoUrl;
+    private String fotoUrl;
     private Boolean emailVerificado;
     private Timestamp dataCriacao;
     private Timestamp dataUltimaAtualizacao;
