@@ -5,8 +5,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import unicap.juryscan.model.Analysis;import java.util.Optional;
-import java.util.UUID;@Repository
-public interface AnalysisRepository extends JpaRepository<Analysis, UUID> {    @Query("SELECT DISTINCT a FROM tb_analise a LEFT JOIN FETCH a.falhas WHERE a.usuario.id = :usuarioId")
-    Page<Analysis> findAllByUsuarioId(@Param("usuarioId") UUID usuarioId, Pageable pageable);    @Query("SELECT a FROM tb_analise a LEFT JOIN FETCH a.falhas WHERE a.id = :id")
+import java.util.UUID;
+
+@Repository
+public interface AnalysisRepository extends JpaRepository<Analysis, UUID> {
+
+    @Query("SELECT DISTINCT a FROM tb_analise a LEFT JOIN FETCH a.falhas WHERE a.usuario.id = :usuarioId")
+    Page<Analysis> findAllByUsuarioId(@Param("usuarioId") UUID usuarioId, Pageable pageable);
+
+    @Query("SELECT a FROM tb_analise a LEFT JOIN FETCH a.falhas WHERE a.id = :id")
     Optional<Analysis> findById(@Param("id") UUID id);
 }
