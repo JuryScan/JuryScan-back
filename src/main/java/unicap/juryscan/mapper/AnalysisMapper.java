@@ -1,6 +1,4 @@
-package unicap.juryscan.mapper;
-
-import org.springframework.stereotype.Component;
+package unicap.juryscan.mapper;import org.springframework.stereotype.Component;
 import unicap.juryscan.dto.integrationAi.AIResponseDTO;
 import unicap.juryscan.dto.analysis.AnalysisCreateDTO;
 import unicap.juryscan.dto.analysis.AnalysisResponseDTO;
@@ -18,13 +16,11 @@ public class AnalysisMapper {
 
     public Analysis toEntity(AIResponseDTO dto) {
         Analysis analysis = new Analysis();
-
         if (dto.getResult() != null) {
             analysis.setTitulo(dto.getResult().getTitulo());
             analysis.setDescricaoGeral(dto.getResult().getDescricaoGeral());
             analysis.setRelatorioSumarioJuridico(dto.getResult().getRelatorio_sumario_juridico());
             analysis.setSumario(dto.getResult().getSumario());
-
             if (dto.getResult().getFailures() != null && !dto.getResult().getFailures().isEmpty()) {
                 analysis.setFalhas(dto.getResult()
                         .getFailures()
@@ -65,13 +61,13 @@ public class AnalysisMapper {
         dto.setRelatorioSumarioJuridico(entity.getRelatorioSumarioJuridico());
         dto.setSumario(entity.getSumario());
         dto.setDataCriacao(entity.getDataCriacao());
-
-        // Mapear falhas se existirem
         if (entity.getFalhas() != null && !entity.getFalhas().isEmpty()) {
             dto.setFalhas(entity.getFalhas()
                     .stream()
                     .map(failureMapper::toResponseDTO)
                     .toList());
+        } else {
+            dto.setFalhas(java.util.Collections.emptyList());
         }
 
         return dto;
