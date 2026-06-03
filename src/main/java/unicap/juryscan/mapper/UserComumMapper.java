@@ -25,6 +25,7 @@ public class UserComumMapper {
                 .ofNullable(entity.getEndereco())
                 .map(endereco -> "/addresses/"+endereco.getId())
                 .orElse(null));
+        dto.setFotoUrl(entity.getFotoUrl());
         dto.setDataCriacao(entity.getDataCriacao());
         dto.setDataUltimaAtualizacao(entity.getDataUltimaAtualizacao());
 

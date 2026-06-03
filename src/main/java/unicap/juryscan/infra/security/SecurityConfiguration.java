@@ -57,6 +57,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/advogado/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
 
+                        // Avatar público (carregado via tag <img>, sem header de Authorization)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/avatar/**").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/me").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/comum/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/advogado/**").authenticated()

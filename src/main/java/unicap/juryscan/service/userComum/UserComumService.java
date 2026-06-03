@@ -10,6 +10,7 @@ import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userComum.UserComumCreateDTO;
 import unicap.juryscan.dto.userComum.UserComumRegisteredDTO;
 import unicap.juryscan.dto.userComum.UserComumResponseDTO;
+import unicap.juryscan.dto.userComum.UserComumUpdateDTO;
 import unicap.juryscan.enums.TipoUserEnum;
 import unicap.juryscan.enums.UserStatusEnum;
 import unicap.juryscan.exception.ResourceNotFoundException;
@@ -108,5 +109,15 @@ public class UserComumService implements IUserComumService {
         if (user.getStatus() == UserStatusEnum.INATIVO) throw new IllegalStateException("Usuário já está inativo");
         user.setStatus(UserStatusEnum.INATIVO);
         userRepository.save(user);
+    }
+
+    @Override
+    public UserComumResponseDTO updateUserComum(UUID id, UserComumUpdateDTO dto) {
+        User user = userRepository.findByTipoUsuarioAndId(TipoUserEnum.COMUM, id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        if (dto.getNomeCompleto() != null) user.setNomeCompleto(dto.getNomeCompleto());
+        if (dto.getTelefone() != null) user.setTelefone(dto.getTelefone());
+        User saved = userRepository.save(user);
+        return userComumMapper.toResponseDTO(saved);
     }
 }

@@ -23,6 +23,7 @@ public class UserAdvogadoResponseDTO {
     private UserStatusEnum status;
     private Boolean emailVerificado;
     private String enderecoUrl;
+    private String fotoUrl;
 
     private String descricao;
     private String numeroOab;

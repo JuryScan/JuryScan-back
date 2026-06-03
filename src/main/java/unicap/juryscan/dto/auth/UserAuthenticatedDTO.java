@@ -24,6 +24,7 @@ public class UserAuthenticatedDTO {
     private UserStatusEnum status;
     private Boolean emailVerificado;
     private String enderecoUrl;
+    private String fotoUrl;
     private TipoUserEnum tipoUsuario;
 
     private String descricao;

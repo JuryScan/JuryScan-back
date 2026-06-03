@@ -8,6 +8,7 @@ import unicap.juryscan.dto.pagination.PageResponse;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoCreateDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoRegisteredDTO;
 import unicap.juryscan.dto.userAdvogado.UserAdvogadoResponseDTO;
+import unicap.juryscan.dto.userAdvogado.UserAdvogadoUpdateDTO;
 import unicap.juryscan.service.reCaptcha.RecaptchaService;
 import unicap.juryscan.service.userAdvogado.UserAdvogadoService;
 import unicap.juryscan.infra.ApiResponse;
@@ -29,9 +30,12 @@ public class UserAdvogadoController {
     @GetMapping("/")
     public ResponseEntity<ApiResponse> getAllUserAdvogados(
             @RequestParam("page") int page,
-            @RequestParam("page_size") int size) {
+            @RequestParam("page_size") int size,
+            @RequestParam(value = "busca", required = false) String busca,
+            @RequestParam(value = "cidade", required = false) String cidade,
+            @RequestParam(value = "estado", required = false) String estado) {
         Pageable pageable = PageRequest.of(page, size);
-        PageResponse<UserAdvogadoResponseDTO> users = userAdvogadoService.getAllUserAdvogados(pageable);
+        PageResponse<UserAdvogadoResponseDTO> users = userAdvogadoService.searchAdvogados(busca, cidade, estado, pageable);
         if (users.getItems().isEmpty()){
             ApiResponse response = new ApiResponse(true, "Nenhum usuário advogado encontrado", 204);
             return ResponseEntity.status(204).body(response);
@@ -68,6 +72,13 @@ public class UserAdvogadoController {
     public ResponseEntity<ApiResponse> softDeleteUser(@PathVariable UUID userId) {
         userAdvogadoService.softDeleteUserAdvogado(userId);
         ApiResponse response = new ApiResponse(true, "Usuário desativado com sucesso", 200);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateUserAdvogado(@PathVariable UUID id, @RequestBody UserAdvogadoUpdateDTO request) {
+        UserAdvogadoResponseDTO updated = userAdvogadoService.updateUserAdvogado(id, request);
+        ApiResponse response = new ApiResponse(true, "Usuário atualizado com sucesso", updated, 200);
         return ResponseEntity.status(200).body(response);
     }
 }
