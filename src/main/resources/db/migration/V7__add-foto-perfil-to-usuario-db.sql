@@ -1,0 +1,4 @@
+ALTER TABLE tb_usuario
+    ADD COLUMN IF NOT EXISTS foto_perfil BYTEA,
+    ADD COLUMN IF NOT EXISTS foto_content_type VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS foto_url VARCHAR(512);
