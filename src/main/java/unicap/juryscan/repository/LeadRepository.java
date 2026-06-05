@@ -24,5 +24,9 @@ public interface LeadRepository extends JpaRepository<Lead, UUID> {
     Optional<Lead> findByAnaliseId(UUID analysisId);
 
     boolean existsByAnaliseId(UUID analysisId);
+
+    long countByAdvogadoIdAndStatus(UUID advogadoId, StatusLeadEnum status);
+
+    long countByStatus(StatusLeadEnum status);
 }
 

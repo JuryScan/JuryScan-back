@@ -17,8 +17,6 @@ public interface IUserAdvogadoService {
 
     PageResponse<UserAdvogadoResponseDTO> getAllUserAdvogados(Pageable pageable);
 
-    PageResponse<UserAdvogadoResponseDTO> searchAdvogados(String busca, String cidade, String estado, Pageable pageable);
-
     UserAdvogadoResponseDTO getUserAdvogadoById(UUID id);
 
     void hardDeleteUserAdvogado(UUID id);
