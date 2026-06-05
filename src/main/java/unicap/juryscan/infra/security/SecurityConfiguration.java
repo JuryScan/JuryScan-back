@@ -78,6 +78,9 @@ public class SecurityConfiguration {
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/analyses/**").authenticated()
 
+                        // Dashboard do advogado (KPIs/métricas agregadas)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/dashboard/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
+
                         // Validar padrão de segurança em webhook
                         .requestMatchers(HttpMethod.POST, "/api/v1/webhook/**").permitAll()
 
