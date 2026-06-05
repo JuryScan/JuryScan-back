@@ -13,8 +13,9 @@ import java.util.UUID;
 @Service
 public class StripeService implements IStripeService{
 
-    @Value("${api.base-url}")
-    private String apiBaseUrl;
+    // URL base do frontend; o gateway redireciona o usuario para ca apos o checkout.
+    @Value("${app.frontend-url:http://localhost:3000}")
+    private String frontendUrl;
 
     public StripeResponse checkoutProducts(ProductRequest productRequest, UUID userId) throws StripeException {
         SessionCreateParams.LineItem.PriceData.ProductData productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
@@ -32,11 +33,10 @@ public class StripeService implements IStripeService{
                 .setPriceData(priceData)
                 .build();
 
-        //TODO successUrl e cancelUrl vão ser páginas mapeadas pelo frontend, incluir posteriormente
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl(apiBaseUrl + "/redirect/payment/success")
-                .setCancelUrl(apiBaseUrl + "/redirect/payment/cancel")
+                .setSuccessUrl(frontendUrl + "/pagamento/sucesso?session_id={CHECKOUT_SESSION_ID}")
+                .setCancelUrl(frontendUrl + "/pagamento/cancelado")
                 .setClientReferenceId(userId.toString())
                 .addLineItem(lineItem)
                 .build();

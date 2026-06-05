@@ -50,6 +50,10 @@ api:
   pricing:
     analysis-cost: ${ANALYSIS_COST:1}
 
+# URL do frontend (retorno do gateway de pagamento)
+app:
+  frontend-url: ${APP_FRONTEND_URL:http://localhost:3000}
+
 # Configurações do Google
 google:
   recaptcha:
