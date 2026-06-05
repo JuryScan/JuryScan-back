@@ -12,6 +12,13 @@ spring:
 # Configurações personalizadas para testes
 api:
   uri: /api/v1
+  base-url: http://localhost:8080
+  data-load:
+    create-default-users: false
+    create-dump-data: false
+  security:
+    token:
+      secret: test-jwt-secret-please-change-in-real-env
   integration:
     services:
       ai-analyzer:
@@ -19,6 +26,22 @@ api:
         api-key: test-api-key
   pricing:
     analysis-cost: ${ANALYSIS_COST:1}
+
+# URL do frontend (retorno do gateway) — dummy para os testes
+app:
+  frontend-url: http://localhost:3000
+
+# Configurações do Google (dummy: testes não chamam o serviço real)
+google:
+  recaptcha:
+    secret: test-recaptcha-secret
+
+# Configurações do Stripe (dummy: testes não chamam a API real do Stripe)
+stripe:
+  secret:
+    key: sk_test_dummy
+  webhook:
+    secret: whsec_test_dummy
 
 # Actuator para testes
 management:

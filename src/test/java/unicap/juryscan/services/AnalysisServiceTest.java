@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import unicap.juryscan.dto.analysis.AnalysisCreateDTO;
 import unicap.juryscan.dto.analysis.AnalysisResponseDTO;
 import unicap.juryscan.exception.ResourceNotFoundException;
 import unicap.juryscan.mapper.AnalysisMapper;
@@ -16,6 +16,7 @@ import unicap.juryscan.repository.AnalysisRepository;
 import unicap.juryscan.repository.UserRepository;
 import unicap.juryscan.service.analysis.AnalysisService;
 import unicap.juryscan.service.serviceAI.IGenericAIService;
+import unicap.juryscan.service.wallet.IWalletService;
 import unicap.juryscan.dto.integrationAi.AIResponseDTO;
 
 import java.util.Optional;
@@ -38,12 +39,19 @@ public class AnalysisServiceTest {
     @Mock
     private IGenericAIService genericAIService;
 
+    @Mock
+    private IWalletService walletService;
+
     @InjectMocks
     private AnalysisService analysisService;
+
+    private static final int ANALYSIS_COST = 1;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+        // @Value nao e resolvido em teste unitario; injeta o custo da analise manualmente
+        ReflectionTestUtils.setField(analysisService, "analysisCost", ANALYSIS_COST);
     }
 
     @Test
@@ -51,10 +59,6 @@ public class AnalysisServiceTest {
         UUID userId = UUID.randomUUID();
         User userMock = new User();
         userMock.setId(userId);
-
-        AnalysisCreateDTO createDTO = new AnalysisCreateDTO();
-        createDTO.setTitulo("Nova Análise");
-        createDTO.setDescricaoGeral("Descrição test");
 
         Analysis analysisEntity = new Analysis();
         analysisEntity.setTitulo("Nova Análise");
@@ -70,9 +74,10 @@ public class AnalysisServiceTest {
         AIResponseDTO aiResponse = new AIResponseDTO();
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(userMock));
+        when(walletService.getBalance(userId)).thenReturn(ANALYSIS_COST + 5);
         when(genericAIService.analyzeDocument(dummyDoc)).thenReturn(aiResponse);
         when(analysisMapper.toEntity(aiResponse)).thenReturn(analysisEntity);
-        when(analysisRepository.save(analysisEntity)).thenReturn(savedEntity);
+        when(analysisRepository.saveAndFlush(analysisEntity)).thenReturn(savedEntity);
         when(analysisMapper.toResponseDTO(savedEntity)).thenReturn(responseDTO);
 
         AnalysisResponseDTO result = analysisService.createAnalysis(userId, dummyDoc);
@@ -80,8 +85,26 @@ public class AnalysisServiceTest {
         assertEquals("Nova Análise", result.getTitulo());
         assertEquals("Descrição test", result.getDescricaoGeral());
 
-        verify(analysisRepository, times(1)).save(analysisEntity);
+        verify(walletService, times(1)).getBalance(userId);
+        verify(analysisRepository, times(1)).saveAndFlush(analysisEntity);
+        verify(walletService, times(1)).deductCredits(userId, ANALYSIS_COST);
         verify(userRepository, times(1)).findById(userId);
+    }
+
+    @Test
+    void testCreateAnalysis_SaldoInsuficiente() {
+        UUID userId = UUID.randomUUID();
+        User userMock = new User();
+        userMock.setId(userId);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(userMock));
+        when(walletService.getBalance(userId)).thenReturn(0);
+
+        assertThrows(IllegalStateException.class,
+                () -> analysisService.createAnalysis(userId, new byte[]{1, 2, 3}));
+
+        verify(walletService, never()).deductCredits(any(), anyInt());
+        verify(analysisRepository, never()).saveAndFlush(any());
     }
 
     @Test
