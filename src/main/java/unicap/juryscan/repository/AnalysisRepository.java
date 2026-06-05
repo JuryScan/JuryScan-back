@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import unicap.juryscan.model.Analysis;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,4 +24,10 @@ public interface AnalysisRepository extends JpaRepository<Analysis, UUID> {
 
     @Query("SELECT COUNT(a) FROM tb_analise a WHERE a.usuario.id = :usuarioId AND a.dataCriacao >= :dataInicio")
     long countByUsuarioIdAndDataCriacaoAfter(@Param("usuarioId") UUID usuarioId, @Param("dataInicio") Timestamp dataInicio);
+
+    @Query("SELECT COUNT(a) FROM tb_analise a WHERE a.usuario.id = :usuarioId")
+    long countByUsuarioId(@Param("usuarioId") UUID usuarioId);
+
+    @Query("SELECT a.dataCriacao FROM tb_analise a WHERE a.usuario.id = :usuarioId AND a.dataCriacao >= :inicio")
+    List<Timestamp> findDatasCriacaoDesde(@Param("usuarioId") UUID usuarioId, @Param("inicio") Timestamp inicio);
 }
