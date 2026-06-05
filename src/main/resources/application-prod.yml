@@ -42,6 +42,10 @@ api:
   pricing:
     analysis-cost: ${ANALYSIS_COST:1}
 
+# URL do frontend (retorno do gateway de pagamento)
+app:
+  frontend-url: ${APP_FRONTEND_URL:https://jury-scan-front-end.vercel.app}
+
 # Configurações do Google
 google:
   recaptcha:
