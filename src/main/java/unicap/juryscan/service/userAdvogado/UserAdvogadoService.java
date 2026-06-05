@@ -121,24 +121,4 @@ public class UserAdvogadoService implements IUserAdvogadoService {
         User saved = userRepository.save(user);
         return userAdvogadoMapper.toResponseDTO(saved);
     }
-
-    @Override
-    public PageResponse<UserAdvogadoResponseDTO> searchAdvogados(String busca, String cidade, String estado, Pageable pageable) {
-        String b = (busca != null && !busca.isBlank()) ? busca : null;
-        String c = (cidade != null && !cidade.isBlank()) ? cidade : null;
-        String e = (estado != null && !estado.isBlank()) ? estado : null;
-
-        Page<UserAdvogadoResponseDTO> page = userRepository
-                .searchAdvogados(TipoUserEnum.ADVOGADO, b, c, e, pageable)
-                .map(userAdvogadoMapper::toResponseDTO);
-
-        PageResponse<UserAdvogadoResponseDTO> pageResponse = new PageResponse<>();
-        pageResponse.setTotalElements(page.getTotalElements());
-        pageResponse.setTotalPages(page.getTotalPages());
-        pageResponse.setPage(page.getNumber());
-        pageResponse.setItems(page.getContent());
-        pageResponse.setPageSize(page.getSize());
-
-        return pageResponse;
-    }
 }

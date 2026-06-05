@@ -18,17 +18,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Page<User> findAllByTipoUsuario(TipoUserEnum tipoUsuario, Pageable pageable);
 
-    @Query("SELECT u FROM tb_usuario u LEFT JOIN u.endereco e WHERE u.tipoUsuario = :tipo "
-            + "AND (:busca IS NULL OR LOWER(u.nomeCompleto) LIKE LOWER(CONCAT('%', :busca, '%')) "
-            + "OR LOWER(u.numeroOab) LIKE LOWER(CONCAT('%', :busca, '%'))) "
-            + "AND (:cidade IS NULL OR LOWER(e.cidade) LIKE LOWER(CONCAT('%', :cidade, '%'))) "
-            + "AND (:estado IS NULL OR LOWER(e.estado) = LOWER(:estado))")
-    Page<User> searchAdvogados(@Param("tipo") TipoUserEnum tipo,
-                               @Param("busca") String busca,
-                               @Param("cidade") String cidade,
-                               @Param("estado") String estado,
-                               Pageable pageable);
-
     Optional<User> findByTipoUsuarioAndId(TipoUserEnum tipoUsuario, UUID id);
 
     UserDetails findByEmailIgnoreCase(String email);

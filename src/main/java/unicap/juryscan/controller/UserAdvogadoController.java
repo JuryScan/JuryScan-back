@@ -30,12 +30,9 @@ public class UserAdvogadoController {
     @GetMapping("/")
     public ResponseEntity<ApiResponse> getAllUserAdvogados(
             @RequestParam("page") int page,
-            @RequestParam("page_size") int size,
-            @RequestParam(value = "busca", required = false) String busca,
-            @RequestParam(value = "cidade", required = false) String cidade,
-            @RequestParam(value = "estado", required = false) String estado) {
+            @RequestParam("page_size") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        PageResponse<UserAdvogadoResponseDTO> users = userAdvogadoService.searchAdvogados(busca, cidade, estado, pageable);
+        PageResponse<UserAdvogadoResponseDTO> users = userAdvogadoService.getAllUserAdvogados(pageable);
         if (users.getItems().isEmpty()){
             ApiResponse response = new ApiResponse(true, "Nenhum usuário advogado encontrado", 204);
             return ResponseEntity.status(204).body(response);

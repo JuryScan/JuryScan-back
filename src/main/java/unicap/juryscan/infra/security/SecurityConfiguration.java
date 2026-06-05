@@ -66,6 +66,21 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/analyses/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/failures/**").authenticated()
 
+                        // Dashboard - métricas para advogados
+                        .requestMatchers(HttpMethod.GET, "/api/v1/dashboard/metrics/me").hasAnyRole("ADVOGADO", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/dashboard/metrics/advogado/**").hasAnyRole("ADVOGADO", "ADMIN")
+
+                        // Leads - Endpoints para usuários comuns
+                        .requestMatchers(HttpMethod.POST, "/api/v1/leads/request").hasAnyRole("COMUM", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/leads/my-requests").hasAnyRole("COMUM", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/leads/*/cancel").hasAnyRole("COMUM", "ADMIN")
+
+                        // Leads - Endpoints para advogados
+                        .requestMatchers(HttpMethod.GET, "/api/v1/leads/available").hasAnyRole("ADVOGADO", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/leads/*/acquire").hasAnyRole("ADVOGADO", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/leads/acquired").hasAnyRole("ADVOGADO", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/leads/*/details").hasAnyRole("ADVOGADO", "ADMIN")
+
                         .requestMatchers(HttpMethod.PUT, "/api/v1/users/comum/**").hasAnyRole("COMUM", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/comum/**").hasAnyRole("COMUM", "ADMIN")
 
