@@ -92,8 +92,9 @@ public class LeadService implements ILeadService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResponse<LeadResponseDTO> getAvailableLeads(Pageable pageable) {
-        Page<Lead> page = leadRepository.findByStatus(StatusLeadEnum.DISPONIVEL, pageable);
+        Page<Lead> page = leadRepository.findByStatusWithDetails(StatusLeadEnum.DISPONIVEL, pageable);
         return leadMapper.toPageResponse(page);
     }
 
@@ -146,14 +147,16 @@ public class LeadService implements ILeadService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResponse<LeadResponseDTO> getLeadsByAdvogado(UUID advogadoId, Pageable pageable) {
-        Page<Lead> page = leadRepository.findByAdvogadoId(advogadoId, pageable);
+        Page<Lead> page = leadRepository.findByAdvogadoIdWithDetails(advogadoId, pageable);
         return leadMapper.toPageResponse(page);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public LeadDetailedResponseDTO getLeadDetails(UUID leadId, UUID advogadoId) {
-        Lead lead = leadRepository.findById(leadId)
+        Lead lead = leadRepository.findByIdWithAllDetails(leadId)
                 .orElseThrow(() -> new ResourceNotFoundException("Lead não encontrado"));
 
         // Validar que o lead foi adquirido por este advogado
@@ -170,8 +173,9 @@ public class LeadService implements ILeadService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResponse<LeadResponseDTO> getMyLeadRequests(UUID userId, Pageable pageable) {
-        Page<Lead> page = leadRepository.findByUsuarioClienteId(userId, pageable);
+        Page<Lead> page = leadRepository.findByUsuarioClienteIdWithDetails(userId, pageable);
         return leadMapper.toPageResponse(page);
     }
 
